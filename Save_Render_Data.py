@@ -9,7 +9,7 @@ Total Time: %(time).2fs
 Average Time: %(average_time).2fs per frame
 
 Resolution: %(res_x)sx%(res_y)spx(%(res_percent)s%%)
-Ture Resolution: %(true_res_x)sx%(true_res_y)spx
+True Resolution: %(true_res_x)sx%(true_res_y)spx
 
 Seed: %(seed)s
 Is seed animated: %(animated_seed)s
@@ -43,7 +43,7 @@ def render_cancel(scene):
 
 @persistent
 def render_init(scene):
-    """Initilize the intermediate props set on the scene."""
+    """Initialize the intermediate props set on the scene."""
     scene[SCRIPT_ID + 'time'] = time.time()  # For logging the total rendering time.
     scene[SCRIPT_ID + 'written'] = False  # Weather or the any files have been written to disk.
 
@@ -120,7 +120,7 @@ def render_complete(scene):
 
 
 class RenderSettings(bpy.types.PropertyGroup):
-    # XXX TODO: Fill in currect properties.
+    # XXX TODO: Fill in correct properties.
     enable = bpy.props.BoolProperty(
         description="Save the render data to file at render.",
         name="Save Render Data",
