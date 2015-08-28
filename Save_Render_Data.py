@@ -20,72 +20,75 @@ Square Samples: %(square_samples)s
 Tile Size: %(tile_x)sx%(tile_y)s
 """.strip()
 
+
 def cleanup(scene):
-    "Remove any intermediate props stored on the scene."
-    
+    """Remove any intermediate props stored on the scene."""
+
     # Loop through all the scene custom props deleting the ones that we set.
     for key in scene.keys():
         if key.startswith(SCRIPT_ID): del scene[key]
 
+
 @persistent
 def render_write(scene):
     # If we are writing a file then we should be writing the stats also.
-    scene[SCRIPT_ID+'written'] = True
+    scene[SCRIPT_ID + 'written'] = True
+
 
 @persistent
 def render_cancel(scene):
-    "Just cleanup the scene because rendering was canceled."
+    """Just cleanup the scene because rendering was canceled."""
     cleanup(scene)
 
 
 @persistent
 def render_init(scene):
-    "Initilize the intermediate props set on the scene."
-    scene[SCRIPT_ID+'time'] = time.time() # For logging the total rendering time.
-    scene[SCRIPT_ID+'written'] = False # Weather or the any files have been written to disk.
+    """Initilize the intermediate props set on the scene."""
+    scene[SCRIPT_ID + 'time'] = time.time()  # For logging the total rendering time.
+    scene[SCRIPT_ID + 'written'] = False  # Weather or the any files have been written to disk.
 
 
 @persistent
 def render_complete(scene):
     # If we haven't written any files then we shouldn't write our stats.
-    if not scene[SCRIPT_ID+'written']:
+    if not scene[SCRIPT_ID + 'written']:
         cleanup(scene)
         return
     # Get the file paths.
     render_dir = bpy.path.abspath(scene.render.filepath)
     path = os.path.join(render_dir, 'render_settings.txt')
-    
-    ### Collect all the data.
-    
+
+    # ## Collect all the data.
+
     # Total render time
-    t = time.time() - scene[SCRIPT_ID+'time']
-    
+    t = time.time() - scene[SCRIPT_ID + 'time']
+
     # Frames
     frame_start = scene.frame_start
     frame_end = scene.frame_end
-    nframes = frame_end - (frame_start-1)
-    average_time = t/nframes
-    
+    nframes = frame_end - (frame_start - 1)
+    average_time = t / nframes
+
     # Resolution
     res_x = scene.render.resolution_x
     res_y = scene.render.resolution_y
     res_percent = scene.render.resolution_percentage
-    
-    true_res_x = res_x * (res_percent/100)
-    true_res_y = res_y * (res_percent/100)
-    
+
+    true_res_x = res_x * (res_percent / 100)
+    true_res_y = res_y * (res_percent / 100)
+
     # Seed
     seed = scene.cycles.seed
     animated_seed = scene.cycles.use_animated_seed
-    
+
     # Samples
     samples = scene.cycles.samples
     square_samples = scene.cycles.use_square_samples
-    
+
     # Tile size
     tile_x = scene.render.tile_x
     tile_y = scene.render.tile_y
-    
+
     ### Format the data
     s = FORMAT % {
         'time': t,
@@ -98,18 +101,18 @@ def render_complete(scene):
         'res_percent': res_percent,
         'true_res_x': true_res_x,
         'true_res_y': true_res_y,
-        'seed': seed, 
+        'seed': seed,
         'animated_seed': animated_seed,
-        'samples': samples, 
+        'samples': samples,
         'square_samples': square_samples,
-        'tile_x': tile_x, 
+        'tile_x': tile_x,
         'tile_y': tile_y
     }
     print(s)
-    
+
     # Cleanup the custom props on the scene.
     cleanup(scene)
-    
+
     ### Write the data to the info file.
     f = open(path, 'w')
     f.write(s)
@@ -121,7 +124,7 @@ class RenderSettings(bpy.types.PropertyGroup):
     enable = bpy.props.BoolProperty(
         description="Save the render data to file at render.",
         name="Save Render Data",
-        default = True
+        default=True
     )
 
 
@@ -137,9 +140,9 @@ class RENDER_PT_SRD(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        
+
         layout.active = context.scene.srd_settings.enable
-        
+
 
 def register():
     # Add handlers
@@ -147,7 +150,7 @@ def register():
     bpy.app.handlers.render_cancel.append(render_cancel)
     bpy.app.handlers.render_init.append(render_init)
     bpy.app.handlers.render_complete.append(render_complete)
-    
+
     # Register custom properties
     bpy.utils.register_class(RenderSettings)
 
@@ -159,19 +162,20 @@ def register():
 
 
 def unregister():
-    ## BEGIN DEBUG CODE ##
+    # # BEGIN DEBUG CODE ##
     bpy.app.handlers.render_write.pop()
     bpy.app.handlers.render_cancel.pop()
     bpy.app.handlers.render_init.pop()
     bpy.app.handlers.render_complete.pop()
     ## END DEBUG CODE ##
-    
+
     # Remove handlers
     #bpy.app.handlers.render_write.remove(render_write)
     #bpy.app.handlers.render_cancel.remove(render_cancel)
     #bpy.app.handlers.render_init.remove(render_init)
     #bpy.app.handlers.render_complete.remove(render_complete)
-    
+
+
 if __name__ == "__main__":
     try:
         unregister()
