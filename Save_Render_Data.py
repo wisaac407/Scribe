@@ -119,8 +119,7 @@ def render_complete(scene):
     f.close()
 
 
-class RenderSettings(bpy.types.PropertyGroup):
-    # XXX TODO: Fill in correct properties.
+class SRDRenderSettings(bpy.types.PropertyGroup):
     enable = bpy.props.BoolProperty(
         description="Save the render data to file at render.",
         name="Save Render Data",
@@ -128,11 +127,12 @@ class RenderSettings(bpy.types.PropertyGroup):
     )
 
 
-class RENDER_PT_SRD(bpy.types.Panel):
+class SRDRenderPanel(bpy.types.Panel):
     """Puts the panel in the render data section."""
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "render"
+    bl_idname = 'RENDER_PT_SRD'
     bl_label = "Save Render Data"
 
     def draw_header(self, context):
@@ -140,7 +140,6 @@ class RENDER_PT_SRD(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-
         layout.active = context.scene.srd_settings.enable
 
 
@@ -151,14 +150,11 @@ def register():
     bpy.app.handlers.render_init.append(render_init)
     bpy.app.handlers.render_complete.append(render_complete)
 
-    # Register custom properties
-    bpy.utils.register_class(RenderSettings)
+    bpy.utils.register_class(SRDRenderPanel)
+    bpy.utils.register_class(SRDRenderSettings)
 
     bpy.types.Scene.srd_settings = \
-        bpy.props.PointerProperty(type=RenderSettings)
-
-    # Register panels
-    bpy.utils.register_class(RENDER_PT_SRD)
+        bpy.props.PointerProperty(type=SRDRenderSettings)
 
 
 def unregister():
