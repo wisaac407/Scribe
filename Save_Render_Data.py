@@ -126,6 +126,64 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
         default=True
     )
 
+settings_hooks = []
+
+
+def register_hook(hook):
+    """Add hook to the list of available hooks and add a bool property to the property group."""
+    settings_hooks.append(hook)
+    setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
+
+
+class SettingsHook:
+    """Base class for all settings hooks"""
+    # Really no need for this to be changed in any instances.
+    hook_template = '{name}: {data}'
+    hook_label = 'Unset'  # Every sub-class should define their own name.
+    hook_idname = ''  # This is how other hooks can reference this one.
+
+    def pre_hook(self):
+        pass
+
+    def post_hook(self):
+        # Every instance should implement this function.
+        raise NotImplementedError
+
+
+class TimeHook(SettingsHook):
+    hook_label = 'Time'
+    hook_idname = 'time'
+
+    t = 0
+
+    def pre_hook(self):
+        self.t = time.time()
+
+    def post_hook(self):
+        return '%.2fs' % (time.time() - self.t)
+
+register_hook(TimeHook)
+
+
+class ResolutionHook(SettingsHook):
+    hook_label = 'Resolution'
+    hook_idname = 'resolution'
+
+    def post_hook(self):
+        pass
+
+register_hook(ResolutionHook)
+
+
+class SeedHook(SettingsHook):
+    hook_label = 'Seed'
+    hook_idname = 'seed'
+
+    def post_hook(self):
+        pass
+
+register_hook(SeedHook)
+
 
 class SRDRenderPanel(bpy.types.Panel):
     """Puts the panel in the render data section."""
@@ -141,6 +199,9 @@ class SRDRenderPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
+        for hook in settings_hooks:
+            layout.prop(context.scene.srd_settings, hook.hook_idname)
+        layout.label('Hello World!')
 
 
 def register():
