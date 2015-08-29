@@ -142,10 +142,10 @@ class SettingsHook:
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
 
-    def pre_hook(self):
+    def pre_hook(self, context):
         pass
 
-    def post_hook(self):
+    def post_hook(self, context):
         # Every instance should implement this function.
         raise NotImplementedError
 
@@ -156,10 +156,10 @@ class TimeHook(SettingsHook):
 
     t = 0
 
-    def pre_hook(self):
+    def pre_hook(self, context):
         self.t = time.time()
 
-    def post_hook(self):
+    def post_hook(self, context):
         return '%.2fs' % (time.time() - self.t)
 
 register_hook(TimeHook)
@@ -169,8 +169,10 @@ class ResolutionHook(SettingsHook):
     hook_label = 'Resolution'
     hook_idname = 'resolution'
 
-    def post_hook(self):
-        pass
+    def post_hook(self, context):
+        x = context.scene.render.resolution_x
+        y = context.scene.render.resolution_y
+        return "%sx%s" % (x, y)
 
 register_hook(ResolutionHook)
 
@@ -179,8 +181,8 @@ class SeedHook(SettingsHook):
     hook_label = 'Seed'
     hook_idname = 'seed'
 
-    def post_hook(self):
-        pass
+    def post_hook(self, context):
+        return str(context.scene.cycles.seed)
 
 register_hook(SeedHook)
 
