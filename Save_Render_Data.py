@@ -103,6 +103,12 @@ class SettingsHook:
     hook_template = '{name}: {data}'
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
+    hook_render_engine = {'ALL'}  # ALL is for every render engine. Though it can be any combination of render engines.
+
+    @classmethod
+    def is_valid_renderer(cls, context):
+        """Return true if this hook can be used with current render engine."""
+        return context.scene.render.engine in cls.hook_render_engine or 'ALL' in cls.hook_render_engine
 
     def __init__(self, scene):
         self.scene = scene
@@ -147,6 +153,7 @@ SRDRenderer.register_hook(ResolutionHook)
 class SeedHook(SettingsHook):
     hook_label = 'Seed'
     hook_idname = 'seed'
+    hook_render_engine = {'CYCLES'}
 
     def post_hook(self):
         return str(self.scene.cycles.seed)
@@ -170,7 +177,8 @@ class SRDRenderPanel(bpy.types.Panel):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
         for hook in SRDRenderer.get_hooks():
-            layout.prop(context.scene.srd_settings, hook.hook_idname)
+            if hook.is_valid_renderer(context):
+                layout.prop(context.scene.srd_settings, hook.hook_idname)
 
 
 def register():
