@@ -2,31 +2,19 @@ import bpy, os, time
 from bpy.app.handlers import persistent
 
 
-written = False
-hooks = []
-
-
-def format_render_data(hooks):
-    s = ""
-    for hook in hooks:
-        s += hook.hook_template.format(name=hook.hook_label, data=hook.post_hook())
-        s += '\n'
-    return s
+srd_renderer = None
 
 
 def cleanup(scene):
     """Remove any intermediate props stored on the scene."""
-
-    global written, hooks
-    written = False
-    hooks = []
+    global srd_renderer
+    srd_renderer = None
 
 
 @persistent
 def render_write(scene):
     # If we are writing a file then we should be writing the stats also.
-    global written
-    written = True
+    srd_renderer.can_render = True
 
 @persistent
 def render_cancel(scene):
@@ -37,40 +25,17 @@ def render_cancel(scene):
 @persistent
 def render_init(scene):
     """Initialize the intermediate props set on the scene."""
-    global written, hooks
-    written = False
-    hooks = []
-    # For every active hook, initialize it with the current scene, run the pre_hook function
-    # and add it to the list of active hooks list.
-    for hook in settings_hooks:
-        # Only add it if it's active.
-        if getattr(scene.srd_settings, hook.hook_idname):
-            hook = hook(scene)
-            hook.pre_hook()
-            hooks.append(hook)
+    global srd_renderer
+    srd_renderer = SRDRenderer(scene)
+
 
 
 @persistent
 def render_complete(scene):
     # If we haven't written any files then we shouldn't write our stats.
-    if not written:
-        cleanup(scene)
-        return
-    # Get the file paths.
-    render_dir = bpy.path.abspath(scene.render.filepath)
-    path = os.path.join(render_dir, 'render_settings.txt')
-
-    # ## Collect all the data.
-    s = format_render_data(hooks)
-    print(s)
-
-    # Cleanup the custom props on the scene.
+    if srd_renderer.can_render:
+        srd_renderer.render()
     cleanup(scene)
-
-    # ## Write the data to the info file.
-    f = open(path, 'w')
-    f.write(s)
-    f.close()
 
 
 class SRDRenderSettings(bpy.types.PropertyGroup):
@@ -81,13 +46,55 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
     )
 
 
-settings_hooks = []
+class SRDRenderer:
+    """Hold the current state of the render, ie if currently rendering."""
 
+    _registered_hooks = []
 
-def register_hook(hook):
-    """Add hook to the list of available hooks and add a bool property to the property group."""
-    settings_hooks.append(hook)
-    setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
+    @classmethod
+    def register_hook(cls, hook):
+        """Add hook to the list of available hooks and add a bool property to the property group."""
+        cls._registered_hooks.append(hook)
+        setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
+
+    @classmethod
+    def get_hooks(cls):
+        return cls._registered_hooks
+
+    def __init__(self, scene):
+        self.scene = scene
+        self._active_hooks = []
+        self.can_render = False  # Weather or not the settings should be rendered.
+
+        # For every active hook, initialize it with the current scene, run the pre_hook function
+        # and add it to the active hooks list.
+        for hook in SRDRenderer._registered_hooks:
+            # Only add it if it's active.
+            if getattr(scene.srd_settings, hook.hook_idname):
+                hook = hook(scene)
+                hook.pre_hook()
+                self._active_hooks.append(hook)
+
+    def render(self):
+        # Get the file paths.
+        render_dir = bpy.path.abspath(self.scene.render.filepath)
+        path = os.path.join(render_dir, 'render_settings.txt')
+
+        ### Collect all the data.
+        s = self.format_render_data()
+        print(s)
+
+        ### Write the data to the info file.
+        f = open(path, 'w')
+        f.write(s)
+        f.close()
+
+    def format_render_data(self):
+        s = ""
+        for hook in self._active_hooks:
+            s += hook.hook_template.format(name=hook.hook_label, data=hook.post_hook())
+            s += '\n'
+        return s
 
 
 class SettingsHook:
@@ -121,7 +128,7 @@ class TimeHook(SettingsHook):
         return '%.2fs' % (time.time() - self.t)
 
 
-register_hook(TimeHook)
+SRDRenderer.register_hook(TimeHook)
 
 
 class ResolutionHook(SettingsHook):
@@ -134,7 +141,7 @@ class ResolutionHook(SettingsHook):
         return "%sx%s" % (x, y)
 
 
-register_hook(ResolutionHook)
+SRDRenderer.register_hook(ResolutionHook)
 
 
 class SeedHook(SettingsHook):
@@ -145,7 +152,7 @@ class SeedHook(SettingsHook):
         return str(self.scene.cycles.seed)
 
 
-register_hook(SeedHook)
+SRDRenderer.register_hook(SeedHook)
 
 
 class SRDRenderPanel(bpy.types.Panel):
@@ -162,7 +169,7 @@ class SRDRenderPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
-        for hook in settings_hooks:
+        for hook in SRDRenderer.get_hooks():
             layout.prop(context.scene.srd_settings, hook.hook_idname)
 
 
