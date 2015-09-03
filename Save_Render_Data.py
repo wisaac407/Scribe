@@ -154,12 +154,24 @@ class TimeHook(SettingsHook):
     hook_idname = 'time'
 
     t = 0
+    ft = 0
+    peakframe = 0
+    peaktime = 0
 
     def pre_render(self):
         self.t = time.time()
 
     def post_render(self):
-        return '%.2fs' % (time.time() - self.t)
+        return '%.2fs(Peak: %.2fs on frame %s)' % (time.time() - self.t, self.peaktime, self.peakframe)
+
+    def pre_frame(self):
+        self.ft = time.time()
+
+    def post_frame(self):
+        frametime = time.time() - self.ft
+        if frametime > self.peaktime:
+            self.peaktime = frametime
+            self.peakframe = self.scene.frame_current
 
 SRDRenderer.register_hook(TimeHook)
 
