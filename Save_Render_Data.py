@@ -21,14 +21,11 @@ def render_cancel(scene):
     """Just cleanup the scene because rendering was canceled."""
     cleanup(scene)
 
-
 @persistent
 def render_init(scene):
     """Initialize the intermediate props set on the scene."""
     global srd_renderer
     srd_renderer = SRDRenderer(scene)
-
-
 
 @persistent
 def render_complete(scene):
@@ -163,7 +160,6 @@ class TimeHook(SettingsHook):
 
     def post_render(self):
         return '%.2fs' % (time.time() - self.t)
-
 
 SRDRenderer.register_hook(TimeHook)
 
