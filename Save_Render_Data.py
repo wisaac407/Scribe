@@ -44,6 +44,12 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
         name="Save Render Data",
         default=True
     )
+    filename = bpy.props.StringProperty(
+        description="Name of output file",
+        name="File Name",
+        default="render_settings.txt",
+        subtype="FILE_NAME"
+    )
 
 
 class SRDRenderer:
@@ -78,7 +84,7 @@ class SRDRenderer:
     def render(self):
         # Get the file paths.
         render_dir = bpy.path.abspath(self.scene.render.filepath)
-        path = os.path.join(render_dir, 'render_settings.txt')
+        path = os.path.join(render_dir, self.scene.srd_settings.filename)
 
         ### Collect all the data.
         s = self.format_render_data()
@@ -176,6 +182,7 @@ class SRDRenderPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
+        layout.prop(context.scene.srd_settings, 'filename')
         for hook in SRDRenderer.get_hooks():
             if hook.is_valid_renderer(context):
                 layout.prop(context.scene.srd_settings, hook.hook_idname)
