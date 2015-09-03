@@ -139,7 +139,6 @@ class TimeHook(SettingsHook):
     def post_hook(self):
         return '%.2fs' % (time.time() - self.t)
 
-
 SRDRenderer.register_hook(TimeHook)
 
 
@@ -151,7 +150,6 @@ class ResolutionHook(SettingsHook):
         x = self.scene.render.resolution_x
         y = self.scene.render.resolution_y
         return "%sx%s" % (x, y)
-
 
 SRDRenderer.register_hook(ResolutionHook)
 
@@ -175,7 +173,6 @@ class SeedHook(SettingsHook):
 
     def post_hook(self):
         return str(self.scene.cycles.seed)
-
 
 SRDRenderer.register_hook(SeedHook)
 
