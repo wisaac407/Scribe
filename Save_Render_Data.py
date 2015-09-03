@@ -33,8 +33,7 @@ def render_init(scene):
 @persistent
 def render_complete(scene):
     # If we haven't written any files then we shouldn't write our stats.
-    if srd_renderer.can_render:
-        srd_renderer.render()
+    srd_renderer.render()
     cleanup(scene)
 
 
@@ -82,6 +81,9 @@ class SRDRenderer:
                 self._active_hooks.append(hook)
 
     def render(self):
+        # Return if we can't render.
+        if not self.can_render:
+            return
         # Get the file paths.
         render_dir = bpy.path.abspath(self.scene.render.filepath)
         path = os.path.join(render_dir, self.scene.srd_settings.filename)
