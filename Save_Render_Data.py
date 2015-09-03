@@ -116,6 +116,7 @@ class SRDRenderer:
             if len(hook.hook_label) > maxlen:
                 maxlen = len(hook.hook_label)
         template = '{name:>%s}: {data}' % (maxlen + 1)
+
         s = ""
         for hook in self._active_hooks:
             s += template.format(name=hook.hook_label, data=hook.post_render())
