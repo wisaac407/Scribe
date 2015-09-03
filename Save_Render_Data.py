@@ -111,9 +111,14 @@ class SRDRenderer:
             hook.post_frame()
 
     def format_render_data(self):
+        maxlen = 0
+        for hook in self._active_hooks:
+            if len(hook.hook_label) > maxlen:
+                maxlen = len(hook.hook_label)
+        template = '{name:>%s}: {data}' % (maxlen + 1)
         s = ""
         for hook in self._active_hooks:
-            s += hook.hook_template.format(name=hook.hook_label, data=hook.post_render())
+            s += template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'
         return s
 
