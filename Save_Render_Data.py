@@ -156,6 +156,18 @@ class ResolutionHook(SettingsHook):
 SRDRenderer.register_hook(ResolutionHook)
 
 
+class FrameRangeHook(SettingsHook):
+    hook_label = 'Frame Range'
+    hook_idname = 'framerange'
+
+    def post_hook(self):
+        start = self.scene.frame_start
+        end = self.scene.frame_end
+        return "%s - %s(Total Frames: %s)" % (start, end, end - (start-1))
+
+SRDRenderer.register_hook(FrameRangeHook)
+
+
 class SeedHook(SettingsHook):
     hook_label = 'Seed'
     hook_idname = 'seed'
