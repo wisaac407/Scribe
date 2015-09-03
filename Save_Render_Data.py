@@ -187,6 +187,7 @@ class ResolutionHook(SettingsHook):
 
 SRDRenderer.register_hook(ResolutionHook)
 
+
 class TrueResolutionHook(SettingsHook):
     hook_label = 'True resolution'
     hook_idname = 'trueres'
