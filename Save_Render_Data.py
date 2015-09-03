@@ -71,13 +71,13 @@ class SRDRenderer:
         self._active_hooks = []
         self.can_render = False  # Weather or not the settings should be rendered.
 
-        # For every active hook, initialize it with the current scene, run the pre_hook function
+        # For every active hook, initialize it with the current scene, run the pre_render function
         # and add it to the active hooks list.
         for hook in SRDRenderer._registered_hooks:
             # Only add it if it's active.
             if getattr(scene.srd_settings, hook.hook_idname):
                 hook = hook(scene)
-                hook.pre_hook()
+                hook.pre_render()
                 self._active_hooks.append(hook)
 
     def render(self):
@@ -100,7 +100,7 @@ class SRDRenderer:
     def format_render_data(self):
         s = ""
         for hook in self._active_hooks:
-            s += hook.hook_template.format(name=hook.hook_label, data=hook.post_hook())
+            s += hook.hook_template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'
         return s
 
@@ -121,10 +121,10 @@ class SettingsHook:
     def __init__(self, scene):
         self.scene = scene
 
-    def pre_hook(self):
+    def pre_render(self):
         pass
 
-    def post_hook(self):
+    def post_render(self):
         # Every instance should implement this function.
         raise NotImplementedError
 
@@ -135,10 +135,10 @@ class TimeHook(SettingsHook):
 
     t = 0
 
-    def pre_hook(self):
+    def pre_render(self):
         self.t = time.time()
 
-    def post_hook(self):
+    def post_render(self):
         return '%.2fs' % (time.time() - self.t)
 
 SRDRenderer.register_hook(TimeHook)
@@ -148,7 +148,7 @@ class ResolutionHook(SettingsHook):
     hook_label = 'Resolution'
     hook_idname = 'resolution'
 
-    def post_hook(self):
+    def post_render(self):
         x = self.scene.render.resolution_x
         y = self.scene.render.resolution_y
         return "%sx%s" % (x, y)
@@ -160,7 +160,7 @@ class FrameRangeHook(SettingsHook):
     hook_label = 'Frame Range'
     hook_idname = 'framerange'
 
-    def post_hook(self):
+    def post_render(self):
         start = self.scene.frame_start
         end = self.scene.frame_end
         return "%s - %s(Total Frames: %s)" % (start, end, end - (start-1))
@@ -173,7 +173,7 @@ class SeedHook(SettingsHook):
     hook_idname = 'seed'
     hook_render_engine = {'CYCLES'}
 
-    def post_hook(self):
+    def post_render(self):
         return str(self.scene.cycles.seed)
 
 SRDRenderer.register_hook(SeedHook)
