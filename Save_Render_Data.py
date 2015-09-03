@@ -36,6 +36,14 @@ def render_complete(scene):
     srd_renderer.render()
     cleanup(scene)
 
+@persistent
+def render_pre(scene):
+    srd_renderer.frame_begin()
+
+@persistent
+def render_post(scene):
+    srd_renderer.frame_complete()
+
 
 class SRDRenderSettings(bpy.types.PropertyGroup):
     enable = bpy.props.BoolProperty(
@@ -97,6 +105,14 @@ class SRDRenderer:
         f.write(s)
         f.close()
 
+    def frame_begin(self):
+        for hook in self._active_hooks:
+            hook.pre_frame()
+
+    def frame_complete(self):
+        for hook in self._active_hooks:
+            hook.post_frame()
+
     def format_render_data(self):
         s = ""
         for hook in self._active_hooks:
@@ -122,11 +138,18 @@ class SettingsHook:
         self.scene = scene
 
     def pre_render(self):
-        pass
+        """Called before the rendering starts."""
 
     def post_render(self):
+        """Called after all the rendering has finished."""
         # Every instance should implement this function.
         raise NotImplementedError
+
+    def pre_frame(self):
+        """Called before the rendering of each frame."""
+
+    def post_frame(self):
+        """Called after the rendering of each frame"""
 
 
 class TimeHook(SettingsHook):
@@ -140,6 +163,7 @@ class TimeHook(SettingsHook):
 
     def post_render(self):
         return '%.2fs' % (time.time() - self.t)
+
 
 SRDRenderer.register_hook(TimeHook)
 
@@ -205,6 +229,8 @@ def register():
     bpy.app.handlers.render_cancel.append(render_cancel)
     bpy.app.handlers.render_init.append(render_init)
     bpy.app.handlers.render_complete.append(render_complete)
+    bpy.app.handlers.render_pre.append(render_pre)
+    bpy.app.handlers.render_post.append(render_post)
 
     bpy.utils.register_class(SRDRenderPanel)
     bpy.utils.register_class(SRDRenderSettings)
@@ -219,6 +245,8 @@ def unregister():
     bpy.app.handlers.render_cancel.pop()
     bpy.app.handlers.render_init.pop()
     bpy.app.handlers.render_complete.pop()
+    bpy.app.handlers.render_pre.pop()
+    bpy.app.handlers.render_post.pop()
     # # END DEBUG CODE ##
 
     # Remove handlers
@@ -226,6 +254,8 @@ def unregister():
     # bpy.app.handlers.render_cancel.remove(render_cancel)
     # bpy.app.handlers.render_init.remove(render_init)
     # bpy.app.handlers.render_complete.remove(render_complete)
+    # bpy.app.handlers.render_pre.remove(render_complete)
+    # bpy.app.handlers.render_post.remove(render_complete)
 
 
 if __name__ == "__main__":
