@@ -187,6 +187,18 @@ class ResolutionHook(SettingsHook):
 
 SRDRenderer.register_hook(ResolutionHook)
 
+class TrueResolutionHook(SettingsHook):
+    hook_label = 'True resolution'
+    hook_idname = 'trueres'
+
+    def post_render(self):
+        fac = self.scene.render.resolution_percentage / 100
+        x = self.scene.render.resolution_x * fac
+        y = self.scene.render.resolution_y * fac
+        return "%sx%s" % (x, y)
+
+SRDRenderer.register_hook(TrueResolutionHook)
+
 
 class FrameRangeHook(SettingsHook):
     hook_label = 'Frame Range'
