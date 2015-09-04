@@ -188,7 +188,7 @@ class ResolutionHook(SettingsHook):
     def post_render(self):
         x = self.scene.render.resolution_x
         y = self.scene.render.resolution_y
-        return "%sx%s" % (x, y)
+        return "%sx%spx" % (x, y)
 
 SRDRenderer.register_hook(ResolutionHook)
 
@@ -201,7 +201,7 @@ class TrueResolutionHook(SettingsHook):
         fac = self.scene.render.resolution_percentage / 100
         x = self.scene.render.resolution_x * fac
         y = self.scene.render.resolution_y * fac
-        return "%sx%s" % (x, y)
+        return "%sx%spx" % (x, y)
 
 SRDRenderer.register_hook(TrueResolutionHook)
 
