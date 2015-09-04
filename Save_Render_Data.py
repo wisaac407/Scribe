@@ -73,15 +73,29 @@ class SRDRenderPanel(bpy.types.Panel):
         layout.prop(context.scene.srd_settings, 'filename')
 
         cur_group = ''  # Keep track of our current group.
+
+        split = layout.split()
+        col1 = split.column()  # Left column
+        col2 = split.column()  # Right column
+
+        use_left = True  # Used for switching columns.
         for hook in SRDRenderer.get_hooks():
             if hook.is_valid_renderer(context):
                 # Only check if the group has changed if the renderer is valid because some groups
                 # are only valid for one renderer.
                 if hook.hook_group != cur_group:
+                    # The current hook has changed, add a new label and switch columns.
                     cur_group = hook.hook_group
-                    layout.label(SRDRenderer.get_group(cur_group)[0] + ':')
 
-                layout.prop(context.scene.srd_settings, hook.hook_idname)
+                    # Grab either the left or the right column, then switch next time around.
+                    col = col1 if use_left else col2
+                    use_left = not use_left
+
+                    # Add the group label.
+                    col.separator()
+                    col.label(SRDRenderer.get_group(cur_group)[0] + ':')
+
+                col.prop(context.scene.srd_settings, hook.hook_idname)
 
 
 class SRDRenderer:
