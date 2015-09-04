@@ -179,7 +179,7 @@ class SRDRenderer:
         template = '{name:>%s}: {data}' % (maxlen + 1)
 
         s = ""
-        lastgroup = 'default'
+        lastgroup = ''
         for hook in self._active_hooks:
             if hook.hook_group != lastgroup:
                 s += '\n%s:\n' % self._registered_groups[hook.hook_group][0]
