@@ -60,12 +60,19 @@ class SRDRenderer:
     """Hold the current state of the render, ie if currently rendering."""
 
     _registered_hooks = []
+    _registered_groups = {'default': ('', 0)}
+    _group_id = 1
 
     @classmethod
     def register_hook(cls, hook):
         """Add hook to the list of available hooks and add a bool property to the property group."""
         cls._registered_hooks.append(hook)
         setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
+
+    @classmethod
+    def register_group(cls, idname, label):
+        cls._registered_groups[idname] = (label, cls._group_id)
+        cls._group_id += 1
 
     @classmethod
     def get_hooks(cls):
@@ -117,8 +124,17 @@ class SRDRenderer:
                 maxlen = len(hook.hook_label)
         template = '{name:>%s}: {data}' % (maxlen + 1)
 
+        def get_group(h):
+            if h.hook_group not in self._registered_groups:
+                raise Exception("Group '%s' has not yet been registered." % h.hook_group)
+            return self._registered_groups[h.hook_group][1]
+
         s = ""
-        for hook in self._active_hooks:
+        lastgroup = 'default'
+        for hook in sorted(self._active_hooks, key=get_group):
+            if hook.hook_group != lastgroup:
+                s += '\n%s:\n' % self._registered_groups[hook.hook_group][0]
+                lastgroup = hook.hook_group
             s += template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'
         return s
@@ -129,6 +145,7 @@ class SettingsHook:
     # Really no need for this to be changed in any instances.
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
+    hook_group = 'default'  # Hooks can be assigned to layout groups.
     hook_render_engine = {'ALL'}  # ALL is for every render engine. Though it can be any combination of render engines.
 
     @classmethod
@@ -180,10 +197,13 @@ class TimeHook(SettingsHook):
 
 SRDRenderer.register_hook(TimeHook)
 
+SRDRenderer.register_group('resolution', 'Output Resolution')
+
 
 class ResolutionHook(SettingsHook):
     hook_label = 'Resolution'
     hook_idname = 'resolution'
+    hook_group = 'resolution'
 
     def post_render(self):
         x = self.scene.render.resolution_x
@@ -196,6 +216,7 @@ SRDRenderer.register_hook(ResolutionHook)
 class TrueResolutionHook(SettingsHook):
     hook_label = 'True resolution'
     hook_idname = 'trueres'
+    hook_group = 'resolution'
 
     def post_render(self):
         fac = self.scene.render.resolution_percentage / 100
@@ -217,10 +238,13 @@ class FrameRangeHook(SettingsHook):
 
 SRDRenderer.register_hook(FrameRangeHook)
 
+SRDRenderer.register_group('seed', 'Seed')
+
 
 class SeedHook(SettingsHook):
     hook_label = 'Seed'
     hook_idname = 'seed'
+    hook_group = 'seed'
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
