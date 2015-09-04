@@ -71,8 +71,16 @@ class SRDRenderPanel(bpy.types.Panel):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
         layout.prop(context.scene.srd_settings, 'filename')
+
+        cur_group = ''  # Keep track of our current group.
         for hook in SRDRenderer.get_hooks():
             if hook.is_valid_renderer(context):
+                # Only check if the group has changed if the renderer is valid because some groups
+                # are only valid for one renderer.
+                if hook.hook_group != cur_group:
+                    cur_group = hook.hook_group
+                    layout.label(SRDRenderer.get_group(cur_group)[0] + ':')
+
                 layout.prop(context.scene.srd_settings, hook.hook_idname)
 
 
@@ -80,7 +88,7 @@ class SRDRenderer:
     """Hold the current state of the render, ie if currently rendering."""
 
     _registered_hooks = []
-    _registered_groups = {'default': ('', 0)}
+    _registered_groups = {'default': ('General', 0)}
     _group_id = 1
 
     @classmethod
@@ -105,6 +113,10 @@ class SRDRenderer:
     @classmethod
     def get_hooks(cls):
         return cls._registered_hooks
+
+    @classmethod
+    def get_group(cls, idname):
+        return cls._registered_groups[idname]
 
     def __init__(self, scene):
         self.scene = scene
