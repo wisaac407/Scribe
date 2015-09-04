@@ -127,7 +127,6 @@ class SRDRenderer:
 class SettingsHook:
     """Base class for all settings hooks"""
     # Really no need for this to be changed in any instances.
-    hook_template = '{name}: {data}'
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
     hook_render_engine = {'ALL'}  # ALL is for every render engine. Though it can be any combination of render engines.
