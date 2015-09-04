@@ -67,6 +67,14 @@ class SRDRenderer:
     def register_hook(cls, hook):
         """Add hook to the list of available hooks and add a bool property to the property group."""
         cls._registered_hooks.append(hook)
+
+        # Sort the list of hooks based on the hook groups.
+        def get_group(h):
+            if h.hook_group not in cls._registered_groups:
+                raise Exception("Group '%s' has not yet been registered." % h.hook_group)
+            return cls._registered_groups[h.hook_group][1]
+        cls._registered_hooks.sort(key=get_group)
+
         setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
 
     @classmethod
@@ -124,14 +132,9 @@ class SRDRenderer:
                 maxlen = len(hook.hook_label)
         template = '{name:>%s}: {data}' % (maxlen + 1)
 
-        def get_group(h):
-            if h.hook_group not in self._registered_groups:
-                raise Exception("Group '%s' has not yet been registered." % h.hook_group)
-            return self._registered_groups[h.hook_group][1]
-
         s = ""
         lastgroup = 'default'
-        for hook in sorted(self._active_hooks, key=get_group):
+        for hook in self._active_hooks:
             if hook.hook_group != lastgroup:
                 s += '\n%s:\n' % self._registered_groups[hook.hook_group][0]
                 lastgroup = hook.hook_group
