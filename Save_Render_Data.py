@@ -117,7 +117,10 @@ class SRDRenderer:
             return cls._registered_groups[h.hook_group][1]
         cls._registered_hooks.sort(key=get_group)
 
-        setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(name=hook.hook_label))
+        setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
+            name=hook.hook_label,
+            description=hook.__doc__
+        ))
 
     @classmethod
     def register_group(cls, idname, label):
@@ -190,7 +193,9 @@ class SRDRenderer:
 
 
 class SettingsHook:
-    """Base class for all settings hooks"""
+    """Base class for all settings hooks.
+
+    Doc string will become the tooltip."""
     # Really no need for this to be changed in any instances.
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
@@ -221,6 +226,7 @@ class SettingsHook:
 
 
 class TimeHook(SettingsHook):
+    """Total render time."""
     hook_label = 'Time'
     hook_idname = 'time'
 
@@ -250,6 +256,7 @@ SRDRenderer.register_group('resolution', 'Output Resolution')
 
 
 class ResolutionHook(SettingsHook):
+    """Target resolution."""
     hook_label = 'Resolution'
     hook_idname = 'resolution'
     hook_group = 'resolution'
@@ -263,6 +270,7 @@ SRDRenderer.register_hook(ResolutionHook)
 
 
 class TrueResolutionHook(SettingsHook):
+    """Actual output resolution."""
     hook_label = 'True resolution'
     hook_idname = 'trueres'
     hook_group = 'resolution'
@@ -277,6 +285,7 @@ SRDRenderer.register_hook(TrueResolutionHook)
 
 
 class FrameRangeHook(SettingsHook):
+    """The output frame range."""
     hook_label = 'Frame Range'
     hook_idname = 'framerange'
 
@@ -291,6 +300,7 @@ SRDRenderer.register_group('seed', 'Seed')
 
 
 class SeedHook(SettingsHook):
+    """Cycles sampling seed."""
     hook_label = 'Seed'
     hook_idname = 'seed'
     hook_group = 'seed'
@@ -303,6 +313,7 @@ SRDRenderer.register_hook(SeedHook)
 
 
 class SeedAnimatedHook(SettingsHook):
+    """Weather or not the seed is animated from frame to frame."""
     hook_label = 'Seed is Animated'
     hook_idname = 'animated_seed'
     hook_group = 'seed'
