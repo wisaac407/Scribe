@@ -252,6 +252,17 @@ class TimeHook(SettingsHook):
 
 SRDRenderer.register_hook(TimeHook)
 
+
+class FrameRateHook(SettingsHook):
+    """Frame rate of the rendered animation."""
+    hook_label = 'Frame Rate'
+    hook_idname = 'fps'
+
+    def post_render(self):
+        return '%sfps' % self.scene.render.fps
+
+SRDRenderer.register_hook(FrameRateHook)
+
 SRDRenderer.register_group('resolution', 'Output Resolution')
 
 
