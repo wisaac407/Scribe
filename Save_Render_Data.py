@@ -253,6 +253,18 @@ class SeedHook(SettingsHook):
 SRDRenderer.register_hook(SeedHook)
 
 
+class SeedAnimatedHook(SettingsHook):
+    hook_label = 'Seed is Animated'
+    hook_idname = 'animated_seed'
+    hook_group = 'seed'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.use_animated_seed)
+
+SRDRenderer.register_hook(SeedAnimatedHook)
+
+
 class SRDRenderPanel(bpy.types.Panel):
     """Puts the panel in the render data section."""
     bl_space_type = 'PROPERTIES'
