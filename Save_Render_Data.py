@@ -119,7 +119,8 @@ class SRDRenderer:
 
         setattr(SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
             name=hook.hook_label,
-            description=hook.__doc__
+            description=hook.__doc__,
+            default=True
         ))
 
     @classmethod
