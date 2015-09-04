@@ -265,6 +265,19 @@ class FrameRateHook(SettingsHook):
 SRDRenderer.register_hook(FrameRateHook)
 
 
+class FrameRangeHook(SettingsHook):
+    """The output frame range."""
+    hook_label = 'Frame Range'
+    hook_idname = 'framerange'
+
+    def post_render(self):
+        start = self.scene.frame_start
+        end = self.scene.frame_end
+        return "%s - %s(Total Frames: %s)" % (start, end, end - (start-1))
+
+SRDRenderer.register_hook(FrameRangeHook)
+
+
 ### Resolution group
 SRDRenderer.register_group('resolution', 'Output Resolution')
 
@@ -296,19 +309,6 @@ class TrueResolutionHook(SettingsHook):
         return "%sx%spx" % (x, y)
 
 SRDRenderer.register_hook(TrueResolutionHook)
-
-
-class FrameRangeHook(SettingsHook):
-    """The output frame range."""
-    hook_label = 'Frame Range'
-    hook_idname = 'framerange'
-
-    def post_render(self):
-        start = self.scene.frame_start
-        end = self.scene.frame_end
-        return "%s - %s(Total Frames: %s)" % (start, end, end - (start-1))
-
-SRDRenderer.register_hook(FrameRangeHook)
 
 
 ### Seed Group
