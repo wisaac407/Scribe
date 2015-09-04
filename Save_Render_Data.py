@@ -264,6 +264,8 @@ class FrameRateHook(SettingsHook):
 
 SRDRenderer.register_hook(FrameRateHook)
 
+
+### Resolution group
 SRDRenderer.register_group('resolution', 'Output Resolution')
 
 
@@ -308,6 +310,8 @@ class FrameRangeHook(SettingsHook):
 
 SRDRenderer.register_hook(FrameRangeHook)
 
+
+### Seed Group
 SRDRenderer.register_group('seed', 'Seed')
 
 
