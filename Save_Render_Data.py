@@ -182,7 +182,7 @@ class SRDRenderer:
         lastgroup = ''
         for hook in self._active_hooks:
             if hook.hook_group != lastgroup:
-                s += '\n%s:\n' % self._registered_groups[hook.hook_group][0]
+                s += '\n%s:\n%s\n' % (self._registered_groups[hook.hook_group][0], '='*50)
                 lastgroup = hook.hook_group
             s += template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'
