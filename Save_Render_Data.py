@@ -56,6 +56,26 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
     )
 
 
+class SRDRenderPanel(bpy.types.Panel):
+    """Puts the panel in the render data section."""
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "render"
+    bl_idname = 'RENDER_PT_SRD'
+    bl_label = "Save Render Data"
+
+    def draw_header(self, context):
+        self.layout.prop(context.scene.srd_settings, "enable", text="")
+
+    def draw(self, context):
+        layout = self.layout
+        layout.active = context.scene.srd_settings.enable
+        layout.prop(context.scene.srd_settings, 'filename')
+        for hook in SRDRenderer.get_hooks():
+            if hook.is_valid_renderer(context):
+                layout.prop(context.scene.srd_settings, hook.hook_idname)
+
+
 class SRDRenderer:
     """Hold the current state of the render, ie if currently rendering."""
 
@@ -266,26 +286,6 @@ class SeedAnimatedHook(SettingsHook):
         return str(self.scene.cycles.use_animated_seed)
 
 SRDRenderer.register_hook(SeedAnimatedHook)
-
-
-class SRDRenderPanel(bpy.types.Panel):
-    """Puts the panel in the render data section."""
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "render"
-    bl_idname = 'RENDER_PT_SRD'
-    bl_label = "Save Render Data"
-
-    def draw_header(self, context):
-        self.layout.prop(context.scene.srd_settings, "enable", text="")
-
-    def draw(self, context):
-        layout = self.layout
-        layout.active = context.scene.srd_settings.enable
-        layout.prop(context.scene.srd_settings, 'filename')
-        for hook in SRDRenderer.get_hooks():
-            if hook.is_valid_renderer(context):
-                layout.prop(context.scene.srd_settings, hook.hook_idname)
 
 
 def register():
