@@ -341,6 +341,35 @@ class SeedAnimatedHook(SettingsHook):
 SRDRenderer.register_hook(SeedAnimatedHook)
 
 
+## Volume Sampling group
+SRDRenderer.register_group('vol_sample', 'Volume Sampling')
+
+
+class VolumeStepHook(SettingsHook):
+    """Cycles volume step size."""
+    hook_label = 'Step Size'
+    hook_idname = 'step_size'
+    hook_group = 'vol_sample'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.volume_step_size)
+
+SRDRenderer.register_hook(VolumeStepHook)
+
+
+class VolumeStepMaxHook(SettingsHook):
+    """Maximum number of cycles volume steps."""
+    hook_label = 'Max Steps'
+    hook_idname = 'step_max_size'
+    hook_group = 'vol_sample'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.volume_max_steps)
+
+SRDRenderer.register_hook(VolumeStepMaxHook)
+
 def register():
     # Add handlers
     bpy.app.handlers.render_write.append(render_write)
