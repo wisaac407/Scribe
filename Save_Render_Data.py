@@ -193,7 +193,7 @@ class SRDRenderer:
         return s
 
 
-class SettingsHook:
+class SRDRenderHook:
     """Base class for all settings hooks.
 
     Doc string will become the tooltip."""
@@ -226,7 +226,7 @@ class SettingsHook:
         """Called after the rendering of each frame"""
 
 
-class TimeHook(SettingsHook):
+class TimeHook(SRDRenderHook):
     """Total render time."""
     hook_label = 'Time'
     hook_idname = 'time'
@@ -254,7 +254,7 @@ class TimeHook(SettingsHook):
 SRDRenderer.register_hook(TimeHook)
 
 
-class FrameRateHook(SettingsHook):
+class FrameRateHook(SRDRenderHook):
     """Frame rate of the rendered animation."""
     hook_label = 'Frame Rate'
     hook_idname = 'fps'
@@ -265,7 +265,7 @@ class FrameRateHook(SettingsHook):
 SRDRenderer.register_hook(FrameRateHook)
 
 
-class FrameRangeHook(SettingsHook):
+class FrameRangeHook(SRDRenderHook):
     """The output frame range."""
     hook_label = 'Frame Range'
     hook_idname = 'framerange'
@@ -282,7 +282,7 @@ SRDRenderer.register_hook(FrameRangeHook)
 SRDRenderer.register_group('resolution', 'Output Resolution')
 
 
-class ResolutionHook(SettingsHook):
+class ResolutionHook(SRDRenderHook):
     """Target resolution."""
     hook_label = 'Resolution'
     hook_idname = 'resolution'
@@ -296,7 +296,7 @@ class ResolutionHook(SettingsHook):
 SRDRenderer.register_hook(ResolutionHook)
 
 
-class TrueResolutionHook(SettingsHook):
+class TrueResolutionHook(SRDRenderHook):
     """Actual output resolution."""
     hook_label = 'True resolution'
     hook_idname = 'trueres'
@@ -315,7 +315,7 @@ SRDRenderer.register_hook(TrueResolutionHook)
 SRDRenderer.register_group('seed', 'Seed')
 
 
-class SeedHook(SettingsHook):
+class SeedHook(SRDRenderHook):
     """Cycles sampling seed."""
     hook_label = 'Seed'
     hook_idname = 'seed'
@@ -328,7 +328,7 @@ class SeedHook(SettingsHook):
 SRDRenderer.register_hook(SeedHook)
 
 
-class SeedAnimatedHook(SettingsHook):
+class SeedAnimatedHook(SRDRenderHook):
     """Weather or not the seed is animated from frame to frame."""
     hook_label = 'Seed is Animated'
     hook_idname = 'animated_seed'
@@ -345,7 +345,7 @@ SRDRenderer.register_hook(SeedAnimatedHook)
 SRDRenderer.register_group('vol_sample', 'Volume Sampling')
 
 
-class VolumeStepHook(SettingsHook):
+class VolumeStepHook(SRDRenderHook):
     """Cycles volume step size."""
     hook_label = 'Step Size'
     hook_idname = 'step_size'
@@ -358,7 +358,7 @@ class VolumeStepHook(SettingsHook):
 SRDRenderer.register_hook(VolumeStepHook)
 
 
-class VolumeStepMaxHook(SettingsHook):
+class VolumeStepMaxHook(SRDRenderHook):
     """Maximum number of cycles volume steps."""
     hook_label = 'Max Steps'
     hook_idname = 'step_max_size'
