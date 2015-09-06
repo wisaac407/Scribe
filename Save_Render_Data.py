@@ -1,4 +1,7 @@
-import bpy, os, time
+import os
+import time
+
+import bpy
 from bpy.app.handlers import persistent
 
 
