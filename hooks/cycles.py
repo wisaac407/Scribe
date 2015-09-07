@@ -1,3 +1,5 @@
+import bpy
+
 from SRDRenderHook import SRDRenderHook
 from SRDRenderer import SRDRenderer
 
@@ -59,3 +61,50 @@ class VolumeStepMaxHook(SRDRenderHook):
         return str(self.scene.cycles.volume_max_steps)
 
 SRDRenderer.register_hook(VolumeStepMaxHook)
+
+
+## Performance group.
+SRDRenderer.register_group('perf', 'Performance')
+
+
+class TileSizeHook(SRDRenderHook):
+    """Tile size."""
+    hook_label = 'Tile Size'
+    hook_idname = 'tile_size'
+    hook_group = 'perf'
+    hook_render_engine = {'CYCLES', 'BLENDER_RENDER'}
+
+    def post_render(self):
+        return '%sx%s' % (self.scene.render.tile_x, self.scene.render.tile_y)
+
+SRDRenderer.register_hook(TileSizeHook)
+
+
+class TileOrderHook(SRDRenderHook):
+    """Cycles tile order."""
+    hook_label = 'Tile Order'
+    hook_idname = 'tile_order'
+    hook_group = 'perf'
+    hook_render_engine = {'CYCLES'}
+
+    # Dictionary mapping order idname -> order label. i.e. {'CENTER': 'center'}
+    orders = dict((idname, label) for idname, label, _ in
+        bpy.types.CyclesRenderSettings.tile_order[1]['items'])
+
+    def post_render(self):
+        return self.orders[self.scene.cycles.tile_order]
+
+SRDRenderer.register_hook(TileOrderHook)
+
+
+class ThreadsHook(SRDRenderHook):
+    """How many threads are being used to render."""
+    hook_label = 'Threads'
+    hook_idname = 'threads'
+    hook_group = 'perf'
+    hook_render_engine = {'CYCLES', 'BLENDER'}
+
+    def post_render(self):
+        return str(self.scene.render.threads)
+
+SRDRenderer.register_hook(ThreadsHook)
