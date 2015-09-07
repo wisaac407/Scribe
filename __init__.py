@@ -114,7 +114,7 @@ def register():
     bpy.types.Scene.srd_settings = \
         bpy.props.PointerProperty(type=SRDRenderSettings)
 
-    import hooks # Nothing else to do
+    from hooks import general, cycles # This is not very pythonic but it works.
 
 
 
