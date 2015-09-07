@@ -99,6 +99,7 @@ class SRDRenderPanel(bpy.types.Panel):
                 col.prop(context.scene.srd_settings, hook.hook_idname)
 
 
+
 def register():
     # Add handlers
     bpy.app.handlers.render_write.append(render_write)
@@ -114,6 +115,7 @@ def register():
     bpy.types.Scene.srd_settings = \
         bpy.props.PointerProperty(type=SRDRenderSettings)
 
+    # We can't import the hooks until after the settings property group has been registered.
     from hooks import general, cycles # This is not very pythonic but it works.
 
 
