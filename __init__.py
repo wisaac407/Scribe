@@ -119,7 +119,6 @@ def register():
     from hooks import general, cycles # This is not very pythonic but it works.
 
 
-
 def unregister():
     # # BEGIN DEBUG CODE ##
     bpy.app.handlers.render_write.pop()
