@@ -97,6 +97,19 @@ class TileOrderHook(SRDRenderHook):
 SRDRenderer.register_hook(TileOrderHook)
 
 
+class ThreadsModeHook(SRDRenderHook):
+    """Which scheme is used to determine the number of threads."""
+    hook_label = 'Threads Mode'
+    hook_idname = 'threads_mode'
+    hook_group = 'perf'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.scene.render.threads_mode.capitalize()
+
+SRDRenderer.register_hook(ThreadsModeHook)
+
+
 class ThreadsHook(SRDRenderHook):
     """How many threads are being used to render."""
     hook_label = 'Threads'
