@@ -121,6 +121,9 @@ def register():
 
 def unregister():
     # # BEGIN DEBUG CODE ##
+    bpy.utils.unregister_class(bpy.types.SRDRenderSettings)  # Unregister whatever is already registered.
+    del bpy.types.Scene.srd_settings
+
     bpy.app.handlers.render_write.pop()
     bpy.app.handlers.render_cancel.pop()
     bpy.app.handlers.render_init.pop()
