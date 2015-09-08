@@ -85,7 +85,7 @@ class TileOrderHook(SRDRenderHook):
     hook_label = 'Tile Order'
     hook_idname = 'tile_order'
     hook_group = 'perf'
-    hook_render_engine = {'CYCLES'}
+    hook_render_engine = {'CYCLES', 'BLENDER_RENDER'}
 
     # Dictionary mapping order idname -> order label. i.e. {'CENTER': 'center'}
     orders = dict((idname, label) for idname, label, _ in
@@ -102,7 +102,7 @@ class ThreadsModeHook(SRDRenderHook):
     hook_label = 'Threads Mode'
     hook_idname = 'threads_mode'
     hook_group = 'perf'
-    hook_render_engine = {'CYCLES'}
+    hook_render_engine = {'CYCLES', 'BLENDER_RENDER'}
 
     def post_render(self):
         return self.scene.render.threads_mode.capitalize()
