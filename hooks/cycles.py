@@ -4,9 +4,6 @@ from SRDRenderHook import SRDRenderHook
 from SRDRenderer import SRDRenderer
 
 ### Seed Group
-SRDRenderer.register_group('seed', 'Seed')
-
-
 class SeedHook(SRDRenderHook):
     """Cycles sampling seed."""
     hook_label = 'Seed'
@@ -16,8 +13,6 @@ class SeedHook(SRDRenderHook):
 
     def post_render(self):
         return str(self.scene.cycles.seed)
-
-SRDRenderer.register_hook(SeedHook)
 
 
 class SeedAnimatedHook(SRDRenderHook):
@@ -30,13 +25,8 @@ class SeedAnimatedHook(SRDRenderHook):
     def post_render(self):
         return str(self.scene.cycles.use_animated_seed)
 
-SRDRenderer.register_hook(SeedAnimatedHook)
-
 
 ## Volume Sampling group
-SRDRenderer.register_group('vol_sample', 'Volume Sampling')
-
-
 class VolumeStepHook(SRDRenderHook):
     """Cycles volume step size."""
     hook_label = 'Step Size'
@@ -46,8 +36,6 @@ class VolumeStepHook(SRDRenderHook):
 
     def post_render(self):
         return str(self.scene.cycles.volume_step_size)
-
-SRDRenderer.register_hook(VolumeStepHook)
 
 
 class VolumeStepMaxHook(SRDRenderHook):
@@ -60,13 +48,8 @@ class VolumeStepMaxHook(SRDRenderHook):
     def post_render(self):
         return str(self.scene.cycles.volume_max_steps)
 
-SRDRenderer.register_hook(VolumeStepMaxHook)
-
 
 ## Performance group.
-SRDRenderer.register_group('perf', 'Performance')
-
-
 class TileSizeHook(SRDRenderHook):
     """Tile size."""
     hook_label = 'Tile Size'
@@ -76,8 +59,6 @@ class TileSizeHook(SRDRenderHook):
 
     def post_render(self):
         return '%sx%s' % (self.scene.render.tile_x, self.scene.render.tile_y)
-
-SRDRenderer.register_hook(TileSizeHook)
 
 
 class TileOrderHook(SRDRenderHook):
@@ -94,8 +75,6 @@ class TileOrderHook(SRDRenderHook):
     def post_render(self):
         return self.orders[self.scene.cycles.tile_order]
 
-SRDRenderer.register_hook(TileOrderHook)
-
 
 class ThreadsModeHook(SRDRenderHook):
     """Which scheme is used to determine the number of threads."""
@@ -106,8 +85,6 @@ class ThreadsModeHook(SRDRenderHook):
 
     def post_render(self):
         return self.scene.render.threads_mode.capitalize()
-
-SRDRenderer.register_hook(ThreadsModeHook)
 
 
 class ThreadsHook(SRDRenderHook):
@@ -120,4 +97,21 @@ class ThreadsHook(SRDRenderHook):
     def post_render(self):
         return str(self.scene.render.threads)
 
-SRDRenderer.register_hook(ThreadsHook)
+
+def register():
+    # Seed group.
+    SRDRenderer.register_group('seed', 'Seed')
+    SRDRenderer.register_hook(SeedHook)
+    SRDRenderer.register_hook(SeedAnimatedHook)
+
+    # Volume sampling group.
+    SRDRenderer.register_group('vol_sample', 'Volume Sampling')
+    SRDRenderer.register_hook(VolumeStepHook)
+    SRDRenderer.register_hook(VolumeStepMaxHook)
+
+    # Performance group.
+    SRDRenderer.register_group('perf', 'Performance')
+    SRDRenderer.register_hook(TileSizeHook)
+    SRDRenderer.register_hook(TileOrderHook)
+    SRDRenderer.register_hook(ThreadsModeHook)
+    SRDRenderer.register_hook(ThreadsHook)

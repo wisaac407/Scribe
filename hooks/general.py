@@ -28,8 +28,6 @@ class TimeHook(SRDRenderHook):
             self.peaktime = frametime
             self.peakframe = self.scene.frame_current
 
-SRDRenderer.register_hook(TimeHook)
-
 
 class FrameRateHook(SRDRenderHook):
     """Frame rate of the rendered animation."""
@@ -38,8 +36,6 @@ class FrameRateHook(SRDRenderHook):
 
     def post_render(self):
         return '%sfps' % self.scene.render.fps
-
-SRDRenderer.register_hook(FrameRateHook)
 
 
 class FrameRangeHook(SRDRenderHook):
@@ -52,13 +48,8 @@ class FrameRangeHook(SRDRenderHook):
         end = self.scene.frame_end
         return "%s - %s(Total Frames: %s)" % (start, end, end - (start-1))
 
-SRDRenderer.register_hook(FrameRangeHook)
-
 
 ### Resolution group
-SRDRenderer.register_group('resolution', 'Output Resolution')
-
-
 class ResolutionHook(SRDRenderHook):
     """Target resolution."""
     hook_label = 'Resolution'
@@ -69,8 +60,6 @@ class ResolutionHook(SRDRenderHook):
         x = self.scene.render.resolution_x
         y = self.scene.render.resolution_y
         return "%sx%spx" % (x, y)
-
-SRDRenderer.register_hook(ResolutionHook)
 
 
 class TrueResolutionHook(SRDRenderHook):
@@ -85,4 +74,14 @@ class TrueResolutionHook(SRDRenderHook):
         y = self.scene.render.resolution_y * fac
         return "%sx%spx" % (x, y)
 
-SRDRenderer.register_hook(TrueResolutionHook)
+
+def register():
+    # General.
+    SRDRenderer.register_hook(TimeHook)
+    SRDRenderer.register_hook(FrameRateHook)
+    SRDRenderer.register_hook(FrameRangeHook)
+
+    # Resolution group.
+    SRDRenderer.register_group('resolution', 'Output Resolution')
+    SRDRenderer.register_hook(ResolutionHook)
+    SRDRenderer.register_hook(TrueResolutionHook)

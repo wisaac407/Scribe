@@ -3,6 +3,9 @@ from bpy.app.handlers import persistent
 
 from SRDRenderer import SRDRenderer
 
+import hooks.cycles
+import hooks.general
+
 srd_renderer = None
 
 
@@ -115,8 +118,9 @@ def register():
     bpy.types.Scene.srd_settings = \
         bpy.props.PointerProperty(type=SRDRenderSettings)
 
-    # We can't import the hooks until after the settings property group has been registered.
-    from hooks import general, cycles # This is not very pythonic but it works.
+    # Register the hooks.
+    hooks.cycles.register()
+    hooks.general.register()
 
 
 def unregister():
