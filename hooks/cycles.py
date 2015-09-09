@@ -227,7 +227,7 @@ def register():
     SRDRenderer.register_hook(ThreadsModeHook)
     SRDRenderer.register_hook(ThreadsHook)
 
-    # Light Paths group.
+    # Bounces group.
     SRDRenderer.register_group('light_bounces', 'Bounces')
     SRDRenderer.register_hook(LBMaxHook)
     SRDRenderer.register_hook(LBMinHook)
