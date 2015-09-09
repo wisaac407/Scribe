@@ -173,7 +173,7 @@ class LPShadowsHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return self.cycles.use_transparent_shadows
+        return self.scene.cycles.use_transparent_shadows
 
 
 class LPCausticsReflectiveHook(SRDRenderHook):
@@ -184,7 +184,7 @@ class LPCausticsReflectiveHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return self.cycles.caustics_reflective
+        return self.scene.cycles.caustics_reflective
 
 
 class LPCausticsRefractiveHook(SRDRenderHook):
@@ -195,7 +195,7 @@ class LPCausticsRefractiveHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return self.cycles.caustics_refractive
+        return self.scene.cycles.caustics_refractive
 
 
 class LPFilterGlossyHook(SRDRenderHook):
@@ -206,7 +206,7 @@ class LPFilterGlossyHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return self.cycles.filter_glossy
+        return self.scene.cycles.blur_glossy
 
 
 def register():
