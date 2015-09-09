@@ -94,4 +94,4 @@ class SRDRenderer:
                 lastgroup = hook.hook_group
             s += template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'
-        return s
+        return s[2:]  # Cut out the first new line character.
