@@ -98,6 +98,73 @@ class ThreadsHook(SRDRenderHook):
         return str(self.scene.render.threads)
 
 
+## Light Paths group.
+class LBMaxHook(SRDRenderHook):
+    """Total Minimum number of reflection bounces."""
+    hook_label = 'Total Max'
+    hook_idname = 'lb_max'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.max_bounces)
+
+
+class LBMinHook(SRDRenderHook):
+    """Total Minimum number of reflection bounces."""
+    hook_label = 'Total Min'
+    hook_idname = 'lb_min'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.min_bounces)
+
+
+class LBDiffuseHook(SRDRenderHook):
+    """Maximum number of diffuse reflection bounces."""
+    hook_label = 'Diffuse'
+    hook_idname = 'lb_diffuse'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.diffuse_bounces)
+
+
+class LBGlossyHook(SRDRenderHook):
+    """Maximum number of glossy reflection bounces."""
+    hook_label = 'Glossy'
+    hook_idname = 'lb_glossy'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.glossy_bounces)
+
+
+class LBTransHook(SRDRenderHook):
+    """Maximum number of transmission reflection bounces."""
+    hook_label = 'Transmission'
+    hook_idname = 'lb_trans'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.transmission_bounces)
+
+
+class LBVolumeHook(SRDRenderHook):
+    """Maximum number of volume reflection bounces."""
+    hook_label = 'Volume'
+    hook_idname = 'lb_volume'
+    hook_group = 'light_bounces'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return str(self.scene.cycles.volume_bounces)
+
+
 def register():
     # Seed group.
     SRDRenderer.register_group('seed', 'Seed')
@@ -115,3 +182,12 @@ def register():
     SRDRenderer.register_hook(TileOrderHook)
     SRDRenderer.register_hook(ThreadsModeHook)
     SRDRenderer.register_hook(ThreadsHook)
+
+    # Light Paths group.
+    SRDRenderer.register_group('light_bounces', 'Bounces')
+    SRDRenderer.register_hook(LBMaxHook)
+    SRDRenderer.register_hook(LBMinHook)
+    SRDRenderer.register_hook(LBDiffuseHook)
+    SRDRenderer.register_hook(LBGlossyHook)
+    SRDRenderer.register_hook(LBTransHook)
+    SRDRenderer.register_hook(LBVolumeHook)
