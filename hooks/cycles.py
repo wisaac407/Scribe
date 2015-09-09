@@ -98,7 +98,7 @@ class ThreadsHook(SRDRenderHook):
         return str(self.scene.render.threads)
 
 
-## Light Paths group.
+## Bounces group.
 class LBMaxHook(SRDRenderHook):
     """Total Minimum number of reflection bounces."""
     hook_label = 'Total Max'
