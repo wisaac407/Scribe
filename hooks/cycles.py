@@ -99,26 +99,15 @@ class ThreadsHook(SRDRenderHook):
 
 
 ## Bounces group.
-class LBMaxHook(SRDRenderHook):
-    """Total Minimum number of reflection bounces."""
-    hook_label = 'Total Max'
-    hook_idname = 'lb_max'
+class LBBoundsHook(SRDRenderHook):
+    """Bounds of the number of reflection bounces."""
+    hook_label = 'Total Bounds'
+    hook_idname = 'lb_bounds'
     hook_group = 'light_bounces'
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.max_bounces)
-
-
-class LBMinHook(SRDRenderHook):
-    """Total Minimum number of reflection bounces."""
-    hook_label = 'Total Min'
-    hook_idname = 'lb_min'
-    hook_group = 'light_bounces'
-    hook_render_engine = {'CYCLES'}
-
-    def post_render(self):
-        return str(self.scene.cycles.min_bounces)
+        return "min: %s, max: %s" % (self.scene.cycles.min_bounces, self.scene.cycles.max_bounces)
 
 
 class LBDiffuseHook(SRDRenderHook):
@@ -229,8 +218,7 @@ def register():
 
     # Bounces group.
     SRDRenderer.register_group('light_bounces', 'Bounces')
-    SRDRenderer.register_hook(LBMaxHook)
-    SRDRenderer.register_hook(LBMinHook)
+    SRDRenderer.register_hook(LBBoundsHook)
     SRDRenderer.register_hook(LBDiffuseHook)
     SRDRenderer.register_hook(LBGlossyHook)
     SRDRenderer.register_hook(LBTransHook)
