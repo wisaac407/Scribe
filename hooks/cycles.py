@@ -165,6 +165,50 @@ class LBVolumeHook(SRDRenderHook):
         return str(self.scene.cycles.volume_bounces)
 
 
+class LPShadowsHook(SRDRenderHook):
+    """Use transparency of surfaces for rendering shadows."""
+    hook_label = 'Shadows'
+    hook_idname = 'lp_shadows'
+    hook_group = 'light_paths'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.cycles.use_transparent_shadows
+
+
+class LPCausticsReflectiveHook(SRDRenderHook):
+    """Using reflective caustics."""
+    hook_label = 'Reflective Caustics'
+    hook_idname = 'lp_caustics_reflective'
+    hook_group = 'light_paths'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.cycles.caustics_reflective
+
+
+class LPCausticsRefractiveHook(SRDRenderHook):
+    """Using refractive caustics."""
+    hook_label = 'Refractive Caustics'
+    hook_idname = 'lp_caustics_refractive'
+    hook_group = 'light_paths'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.cycles.caustics_refractive
+
+
+class LPFilterGlossyHook(SRDRenderHook):
+    """Cycles filter glossy threshold."""
+    hook_label = 'Filter Glossy'
+    hook_idname = 'lp_filter_glossy'
+    hook_group = 'light_paths'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.cycles.filter_glossy
+
+
 def register():
     # Seed group.
     SRDRenderer.register_group('seed', 'Seed')
@@ -191,3 +235,10 @@ def register():
     SRDRenderer.register_hook(LBGlossyHook)
     SRDRenderer.register_hook(LBTransHook)
     SRDRenderer.register_hook(LBVolumeHook)
+
+    # Light Paths group.
+    SRDRenderer.register_group('light_paths', 'Light Paths')
+    SRDRenderer.register_hook(LPShadowsHook)
+    SRDRenderer.register_hook(LPCausticsReflectiveHook)
+    SRDRenderer.register_hook(LPCausticsRefractiveHook)
+    SRDRenderer.register_hook(LPFilterGlossyHook)
