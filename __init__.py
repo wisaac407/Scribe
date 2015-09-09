@@ -119,8 +119,8 @@ def register():
         bpy.props.PointerProperty(type=SRDRenderSettings)
 
     # Register the hooks.
-    hooks.cycles.register()
     hooks.general.register()
+    hooks.cycles.register()
 
 
 def unregister():
