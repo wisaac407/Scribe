@@ -198,6 +198,43 @@ class LPFilterGlossyHook(SRDRenderHook):
         return self.scene.cycles.blur_glossy
 
 
+## Sampling group
+class SMSamplesHook(SRDRenderHook):
+    """Number of cycles samples used(accounting for square samples)."""
+    hook_label = 'Samples'
+    hook_idname = 'sm_samples'
+    hook_group = 'sampling'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        samples = self.scene.cycles.samples
+        square_samples = self.scene.cycles.use_square_samples
+        # If we are using square samples then square the output.
+        return samples * samples if square_samples else samples
+
+
+class SMClampDirectHook(SRDRenderHook):
+    """How much we are clamping direct light."""
+    hook_label = 'Clamp Direct'
+    hook_idname = 'sm_clamp_direct'
+    hook_group = 'sampling'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.scene.cycles.sample_clamp_direct
+
+
+class SMClampIndirectHook(SRDRenderHook):
+    """How much we are clamping indirect light."""
+    hook_label = 'Clamp Indirect'
+    hook_idname = 'sm_clamp_indirect'
+    hook_group = 'sampling'
+    hook_render_engine = {'CYCLES'}
+
+    def post_render(self):
+        return self.scene.cycles.sample_clamp_indirect
+
+
 def register():
     # Seed group.
     SRDRenderer.register_group('seed', 'Seed')
@@ -230,3 +267,9 @@ def register():
     SRDRenderer.register_hook(LPCausticsReflectiveHook)
     SRDRenderer.register_hook(LPCausticsRefractiveHook)
     SRDRenderer.register_hook(LPFilterGlossyHook)
+
+    # Sampling group
+    SRDRenderer.register_group('sampling', 'Sampling')
+    SRDRenderer.register_hook(SMSamplesHook)
+    SRDRenderer.register_hook(SMClampDirectHook)
+    SRDRenderer.register_hook(SMClampIndirectHook)
