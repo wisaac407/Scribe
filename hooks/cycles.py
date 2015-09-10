@@ -92,7 +92,7 @@ class ThreadsHook(SRDRenderHook):
     hook_label = 'Threads'
     hook_idname = 'threads'
     hook_group = 'perf'
-    hook_render_engine = {'CYCLES', 'BLENDER'}
+    hook_render_engine = {'CYCLES', 'BLENDER_RENDER'}
 
     def post_render(self):
         return str(self.scene.render.threads)
