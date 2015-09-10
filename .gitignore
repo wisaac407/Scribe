@@ -1,2 +1,6 @@
 # Ignore compiled python files.
 __pycache__/
+
+# Project files
+workspace.xml
+tasks.xml
