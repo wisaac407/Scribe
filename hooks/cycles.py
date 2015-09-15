@@ -34,7 +34,7 @@ class SeedHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.seed)
+        return self.scene.cycles.seed
 
 
 class SeedAnimatedHook(SRDRenderHook):
@@ -45,7 +45,7 @@ class SeedAnimatedHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.use_animated_seed)
+        return self.scene.cycles.use_animated_seed
 
 
 ## Volume Sampling group
@@ -57,7 +57,7 @@ class VolumeStepHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.volume_step_size)
+        return self.scene.cycles.volume_step_size
 
 
 class VolumeStepMaxHook(SRDRenderHook):
@@ -68,7 +68,7 @@ class VolumeStepMaxHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.volume_max_steps)
+        return self.scene.cycles.volume_max_steps
 
 
 ## Performance group.
@@ -117,7 +117,7 @@ class ThreadsHook(SRDRenderHook):
     hook_render_engine = {'CYCLES', 'BLENDER_RENDER'}
 
     def post_render(self):
-        return str(self.scene.render.threads)
+        return self.scene.render.threads
 
 
 ## Bounces group.
@@ -140,7 +140,7 @@ class LBDiffuseHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.diffuse_bounces)
+        return self.scene.cycles.diffuse_bounces
 
 
 class LBGlossyHook(SRDRenderHook):
@@ -151,7 +151,7 @@ class LBGlossyHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.glossy_bounces)
+        return self.scene.cycles.glossy_bounces
 
 
 class LBTransHook(SRDRenderHook):
@@ -162,7 +162,7 @@ class LBTransHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.transmission_bounces)
+        return self.scene.cycles.transmission_bounces
 
 
 class LBVolumeHook(SRDRenderHook):
@@ -173,7 +173,7 @@ class LBVolumeHook(SRDRenderHook):
     hook_render_engine = {'CYCLES'}
 
     def post_render(self):
-        return str(self.scene.cycles.volume_bounces)
+        return self.scene.cycles.volume_bounces
 
 
 class LPShadowsHook(SRDRenderHook):
