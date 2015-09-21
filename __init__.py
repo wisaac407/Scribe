@@ -23,10 +23,9 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 import bpy
 from bpy.app.handlers import persistent
 
-from SRDRenderer import SRDRenderer
+from .SRDRenderer import SRDRenderer
 
-import hooks.cycles
-import hooks.general
+from .hooks import cycles, general
 
 srd_renderer = None
 
@@ -141,8 +140,8 @@ def register():
         bpy.props.PointerProperty(type=SRDRenderSettings)
 
     # Register the hooks.
-    hooks.general.register()
-    hooks.cycles.register()
+    general.register()
+    cycles.register()
 
 
 def unregister():

@@ -21,8 +21,8 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 
 import time
-from SRDRenderHook import SRDRenderHook
-from SRDRenderer import SRDRenderer
+from ..SRDRenderHook import SRDRenderHook
+from ..SRDRenderer import SRDRenderer
 
 
 class TimeHook(SRDRenderHook):

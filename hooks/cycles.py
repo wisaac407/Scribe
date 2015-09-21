@@ -22,8 +22,9 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import bpy
 
-from SRDRenderHook import SRDRenderHook
-from SRDRenderer import SRDRenderer
+from ..SRDRenderHook import SRDRenderHook
+from ..SRDRenderer import SRDRenderer
+
 
 ### Seed Group
 class SeedHook(SRDRenderHook):
