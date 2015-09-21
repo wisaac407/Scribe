@@ -105,6 +105,7 @@ class SRDRenderPanel(bpy.types.Panel):
 
         use_left = True  # Used for switching columns.
         for hook in SRDRenderer.get_hooks():
+            print(hook)
             if hook.is_valid_renderer(context):
                 # Only check if the group has changed if the renderer is valid because some groups
                 # are only valid for one renderer.
@@ -145,29 +146,33 @@ def register():
 
 
 def unregister():
-    # # BEGIN DEBUG CODE ##
-    bpy.utils.unregister_class(bpy.types.SRDRenderSettings)  # Unregister whatever is already registered.
-    del bpy.types.Scene.srd_settings
-
-    bpy.app.handlers.render_write.pop()
-    bpy.app.handlers.render_cancel.pop()
-    bpy.app.handlers.render_init.pop()
-    bpy.app.handlers.render_complete.pop()
-    bpy.app.handlers.render_pre.pop()
-    bpy.app.handlers.render_post.pop()
-    # # END DEBUG CODE ##
-
     # Remove handlers
-    # bpy.app.handlers.render_write.remove(render_write)
-    # bpy.app.handlers.render_cancel.remove(render_cancel)
-    # bpy.app.handlers.render_init.remove(render_init)
-    # bpy.app.handlers.render_complete.remove(render_complete)
-    # bpy.app.handlers.render_pre.remove(render_complete)
-    # bpy.app.handlers.render_post.remove(render_complete)
+    bpy.app.handlers.render_write.remove(render_write)
+    bpy.app.handlers.render_cancel.remove(render_cancel)
+    bpy.app.handlers.render_init.remove(render_init)
+    bpy.app.handlers.render_complete.remove(render_complete)
+    bpy.app.handlers.render_pre.remove(render_complete)
+    bpy.app.handlers.render_post.remove(render_complete)
+
+    bpy.utils.unregister_class(SRDRenderPanel)
+    bpy.utils.unregister_class(SRDRenderSettings)
+
+    del bpy.types.Scene.srd_settings
 
 
 if __name__ == "__main__":
     try:
-        unregister()
+        # This is necessary if the code is going to be re-run in the same blender instance.
+        bpy.utils.unregister_class(bpy.types.SRDRenderSettings)  # Unregister whatever is already registered.
+        del bpy.types.Scene.srd_settings
+
+        bpy.app.handlers.render_write.pop()
+        bpy.app.handlers.render_cancel.pop()
+        bpy.app.handlers.render_init.pop()
+        bpy.app.handlers.render_complete.pop()
+        bpy.app.handlers.render_pre.pop()
+        bpy.app.handlers.render_post.pop()
+    except AttributeError:  # bpy.types.SRDRenderSettings doesn't exist.
+        print('First time run in current blender instance.')
     finally:
         register()
