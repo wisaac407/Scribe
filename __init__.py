@@ -79,6 +79,11 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
         default="render_settings.txt",
         subtype="FILE_NAME"
     )
+    use_all_hooks = bpy.props.BoolProperty(
+        description="Use all render hooks(vs. selecting the ones you want).",
+        name="Use all hooks",
+        default=True
+    )
 
 
 class SRDRenderPanel(bpy.types.Panel):
@@ -96,6 +101,10 @@ class SRDRenderPanel(bpy.types.Panel):
         layout = self.layout
         layout.active = context.scene.srd_settings.enable
         layout.prop(context.scene.srd_settings, 'filename')
+        layout.prop(context.scene.srd_settings, 'use_all_hooks')
+
+        if context.scene.srd_settings.use_all_hooks:
+            return
 
         cur_group = ''  # Keep track of our current group.
 
@@ -105,7 +114,6 @@ class SRDRenderPanel(bpy.types.Panel):
 
         use_left = True  # Used for switching columns.
         for hook in SRDRenderer.get_hooks():
-            print(hook)
             if hook.is_valid_renderer(context):
                 # Only check if the group has changed if the renderer is valid because some groups
                 # are only valid for one renderer.

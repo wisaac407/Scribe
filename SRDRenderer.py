@@ -69,9 +69,11 @@ class SRDRenderer:
 
         # For every active hook, initialize it with the current scene, run the pre_render function
         # and add it to the active hooks list.
+
+        use_all_hooks = scene.srd_settings.use_all_hooks
         for hook in SRDRenderer._registered_hooks:
             # Only add it if it's active.
-            if getattr(scene.srd_settings, hook.hook_idname):
+            if use_all_hooks or getattr(scene.srd_settings, hook.hook_idname):
                 hook = hook(scene)
                 hook.pre_render()
                 self._active_hooks.append(hook)
