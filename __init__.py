@@ -132,7 +132,6 @@ class SRDRenderPanel(bpy.types.Panel):
                 col.prop(context.scene.srd_settings, hook.hook_idname)
 
 
-
 def register():
     # Add handlers
     bpy.app.handlers.render_write.append(render_write)
