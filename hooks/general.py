@@ -21,8 +21,22 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 
 import time
+import bpy
 from ..ScribeRenderHook import ScribeRenderHook
 from ..ScribeRenderer import ScribeRenderer
+
+
+class RenderEngineHook(ScribeRenderHook):
+    """Which render engine is used to render."""
+    hook_label = 'Render engine'
+    hook_idname = 'engine'
+
+    def post_render(self):
+        engine_id = self.scene.render.engine
+        if engine_id == 'BLENDER_RENDER':  # The built in blender render is a special case.
+            return 'Blender Render'
+        else:
+            return getattr(bpy.types, engine_id).bl_label
 
 
 class TimeHook(ScribeRenderHook):
@@ -99,6 +113,7 @@ class TrueResolutionHook(ScribeRenderHook):
 
 def register():
     # General.
+    ScribeRenderer.register_hook(RenderEngineHook)
     ScribeRenderer.register_hook(TimeHook)
     ScribeRenderer.register_hook(FrameRateHook)
     ScribeRenderer.register_hook(FrameRangeHook)
