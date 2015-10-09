@@ -69,8 +69,8 @@ def render_post(scene):
 
 class ScribeRenderSettings(bpy.types.PropertyGroup):
     enable = bpy.props.BoolProperty(
-        description="Save the render data to file at render.",
-        name="Save Render Data",
+        description="Enable Scribe so the render settings get saved to a file on renders.",
+        name="Scribe",
         default=True
     )
     filename = bpy.props.StringProperty(
@@ -80,7 +80,7 @@ class ScribeRenderSettings(bpy.types.PropertyGroup):
         subtype="FILE_NAME"
     )
     use_all_hooks = bpy.props.BoolProperty(
-        description="Use all render hooks(vs. selecting the ones you want).",
+        description="Use all render hooks(vs. selecting just the ones you want).",
         name="Use all hooks",
         default=True
     )
