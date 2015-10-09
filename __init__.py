@@ -27,19 +27,19 @@ from .ScribeRenderer import ScribeRenderer
 
 from .hooks import cycles, general
 
-srd_renderer = None
+scribe_renderer = None
 
 
 def cleanup(scene):
     """Remove any intermediate props stored on the scene."""
-    global srd_renderer
-    srd_renderer = None
+    global scribe_renderer
+    scribe_renderer = None
 
 
 @persistent
 def render_write(scene):
     # If we are writing a file then we should be writing the stats also.
-    srd_renderer.can_render = True
+    scribe_renderer.can_render = True
 
 @persistent
 def render_cancel(scene):
@@ -49,22 +49,22 @@ def render_cancel(scene):
 @persistent
 def render_init(scene):
     """Initialize the intermediate props set on the scene."""
-    global srd_renderer
-    srd_renderer = ScribeRenderer(scene)
+    global scribe_renderer
+    scribe_renderer = ScribeRenderer(scene)
 
 @persistent
 def render_complete(scene):
     # If we haven't written any files then we shouldn't write our stats.
-    srd_renderer.render()
+    scribe_renderer.render()
     cleanup(scene)
 
 @persistent
 def render_pre(scene):
-    srd_renderer.frame_begin()
+    scribe_renderer.frame_begin()
 
 @persistent
 def render_post(scene):
-    srd_renderer.frame_complete()
+    scribe_renderer.frame_complete()
 
 
 class ScribeRenderSettings(bpy.types.PropertyGroup):
