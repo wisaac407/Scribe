@@ -1,5 +1,5 @@
 """
-SRDRenderHook.py: Base class for all hooks.
+ScribeRenderHook.py: Base class for all hooks.
 
 Copyright (C) 2015 Isaac Weaver
 Author: Isaac Weaver <wisaac407@gmail.com>
@@ -20,7 +20,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 """
 
 
-class SRDRenderHook:
+class ScribeRenderHook:
     """Base class for all settings hooks.
 
     Doc string will become the tooltip."""

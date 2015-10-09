@@ -23,7 +23,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 import bpy
 from bpy.app.handlers import persistent
 
-from .SRDRenderer import SRDRenderer
+from .ScribeRenderer import ScribeRenderer
 
 from .hooks import cycles, general
 
@@ -50,7 +50,7 @@ def render_cancel(scene):
 def render_init(scene):
     """Initialize the intermediate props set on the scene."""
     global srd_renderer
-    srd_renderer = SRDRenderer(scene)
+    srd_renderer = ScribeRenderer(scene)
 
 @persistent
 def render_complete(scene):
@@ -67,7 +67,7 @@ def render_post(scene):
     srd_renderer.frame_complete()
 
 
-class SRDRenderSettings(bpy.types.PropertyGroup):
+class ScribeRenderSettings(bpy.types.PropertyGroup):
     enable = bpy.props.BoolProperty(
         description="Save the render data to file at render.",
         name="Save Render Data",
@@ -86,24 +86,24 @@ class SRDRenderSettings(bpy.types.PropertyGroup):
     )
 
 
-class SRDRenderPanel(bpy.types.Panel):
+class ScribeRenderPanel(bpy.types.Panel):
     """Puts the panel in the render data section."""
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "render"
-    bl_idname = 'RENDER_PT_SRD'
-    bl_label = "Save Render Data"
+    bl_idname = 'RENDER_PT_Scribe'
+    bl_label = "Scribe"
 
     def draw_header(self, context):
-        self.layout.prop(context.scene.srd_settings, "enable", text="")
+        self.layout.prop(context.scene.scribe, "enable", text="")
 
     def draw(self, context):
         layout = self.layout
-        layout.active = context.scene.srd_settings.enable
-        layout.prop(context.scene.srd_settings, 'filename')
-        layout.prop(context.scene.srd_settings, 'use_all_hooks')
+        layout.active = context.scene.scribe.enable
+        layout.prop(context.scene.scribe, 'filename')
+        layout.prop(context.scene.scribe, 'use_all_hooks')
 
-        if context.scene.srd_settings.use_all_hooks:
+        if context.scene.scribe.use_all_hooks:
             return
 
         cur_group = ''  # Keep track of our current group.
@@ -113,7 +113,7 @@ class SRDRenderPanel(bpy.types.Panel):
         col2 = split.column()  # Right column
 
         use_left = True  # Used for switching columns.
-        for hook in SRDRenderer.get_hooks():
+        for hook in ScribeRenderer.get_hooks():
             if hook.is_valid_renderer(context):
                 # Only check if the group has changed if the renderer is valid because some groups
                 # are only valid for one renderer.
@@ -127,9 +127,9 @@ class SRDRenderPanel(bpy.types.Panel):
 
                     # Add the group label.
                     col.separator()
-                    col.label(SRDRenderer.get_group(cur_group)[0] + ':')
+                    col.label(ScribeRenderer.get_group(cur_group)[0] + ':')
 
-                col.prop(context.scene.srd_settings, hook.hook_idname)
+                col.prop(context.scene.scribe, hook.hook_idname)
 
 
 def register():
@@ -141,11 +141,11 @@ def register():
     bpy.app.handlers.render_pre.append(render_pre)
     bpy.app.handlers.render_post.append(render_post)
 
-    bpy.utils.register_class(SRDRenderPanel)
-    bpy.utils.register_class(SRDRenderSettings)
+    bpy.utils.register_class(ScribeRenderPanel)
+    bpy.utils.register_class(ScribeRenderSettings)
 
-    bpy.types.Scene.srd_settings = \
-        bpy.props.PointerProperty(type=SRDRenderSettings)
+    bpy.types.Scene.scribe = \
+        bpy.props.PointerProperty(type=ScribeRenderSettings)
 
     # Register the hooks.
     general.register()
@@ -161,17 +161,17 @@ def unregister():
     bpy.app.handlers.render_pre.remove(render_complete)
     bpy.app.handlers.render_post.remove(render_complete)
 
-    bpy.utils.unregister_class(SRDRenderPanel)
-    bpy.utils.unregister_class(SRDRenderSettings)
+    bpy.utils.unregister_class(ScribeRenderPanel)
+    bpy.utils.unregister_class(ScribeRenderSettings)
 
-    del bpy.types.Scene.srd_settings
+    del bpy.types.Scene.scribe
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" or __loader__ == "ScriptWatcher":
     try:
         # This is necessary if the code is going to be re-run in the same blender instance.
-        bpy.utils.unregister_class(bpy.types.SRDRenderSettings)  # Unregister whatever is already registered.
-        del bpy.types.Scene.srd_settings
+        bpy.utils.unregister_class(bpy.types.ScribeRenderSettings)  # Unregister whatever is already registered.
+        del bpy.types.Scene.scribe
 
         bpy.app.handlers.render_write.pop()
         bpy.app.handlers.render_cancel.pop()
@@ -179,7 +179,7 @@ if __name__ == "__main__":
         bpy.app.handlers.render_complete.pop()
         bpy.app.handlers.render_pre.pop()
         bpy.app.handlers.render_post.pop()
-    except AttributeError:  # bpy.types.SRDRenderSettings doesn't exist.
+    except AttributeError:  # bpy.types.ScribeRenderSettings doesn't exist.
         print('First time run in current blender instance.')
     finally:
         register()

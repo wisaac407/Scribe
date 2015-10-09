@@ -1,5 +1,5 @@
 """
-SRDRenderer.py: The class that will keep track of hooks and handle outputting the stats file.
+ScribeRenderer.py: The class that will keep track of hooks and handle outputting the stats file.
 
 Copyright (C) 2015 Isaac Weaver
 Author: Isaac Weaver <wisaac407@gmail.com>
@@ -24,7 +24,7 @@ import os
 import bpy
 
 
-class SRDRenderer:
+class ScribeRenderer:
     """Hold the current state of the render, ie if currently rendering."""
 
     _registered_hooks = []
@@ -43,7 +43,7 @@ class SRDRenderer:
             return cls._registered_groups[h.hook_group][1]
         cls._registered_hooks.sort(key=get_group)
 
-        setattr(bpy.types.SRDRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
+        setattr(bpy.types.ScribeRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
             name=hook.hook_label,
             description=hook.__doc__,
             default=True
@@ -70,10 +70,10 @@ class SRDRenderer:
         # For every active hook, initialize it with the current scene, run the pre_render function
         # and add it to the active hooks list.
 
-        use_all_hooks = scene.srd_settings.use_all_hooks
-        for hook in SRDRenderer._registered_hooks:
+        use_all_hooks = scene.scribe.use_all_hooks
+        for hook in ScribeRenderer._registered_hooks:
             # Only add it if it's active.
-            if use_all_hooks or getattr(scene.srd_settings, hook.hook_idname):
+            if use_all_hooks or getattr(scene.scribe, hook.hook_idname):
                 hook = hook(scene)
                 hook.pre_render()
                 self._active_hooks.append(hook)
@@ -84,7 +84,7 @@ class SRDRenderer:
             return
         # Get the file paths.
         render_dir = bpy.path.abspath(self.scene.render.filepath)
-        path = os.path.join(render_dir, self.scene.srd_settings.filename)
+        path = os.path.join(render_dir, self.scene.scribe.filename)
 
         ### Collect all the data.
         s = self.format_render_data()

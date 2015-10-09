@@ -22,12 +22,12 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import bpy
 
-from ..SRDRenderHook import SRDRenderHook
-from ..SRDRenderer import SRDRenderer
+from ..ScribeRenderHook import ScribeRenderHook
+from ..ScribeRenderer import ScribeRenderer
 
 
 ### Seed Group
-class SeedHook(SRDRenderHook):
+class SeedHook(ScribeRenderHook):
     """Cycles sampling seed."""
     hook_label = 'Seed'
     hook_idname = 'seed'
@@ -38,7 +38,7 @@ class SeedHook(SRDRenderHook):
         return self.scene.cycles.seed
 
 
-class SeedAnimatedHook(SRDRenderHook):
+class SeedAnimatedHook(ScribeRenderHook):
     """Weather or not the seed is animated from frame to frame."""
     hook_label = 'Seed is Animated'
     hook_idname = 'animated_seed'
@@ -50,7 +50,7 @@ class SeedAnimatedHook(SRDRenderHook):
 
 
 ## Volume Sampling group
-class VolumeStepHook(SRDRenderHook):
+class VolumeStepHook(ScribeRenderHook):
     """Cycles volume step size."""
     hook_label = 'Step Size'
     hook_idname = 'step_size'
@@ -61,7 +61,7 @@ class VolumeStepHook(SRDRenderHook):
         return self.scene.cycles.volume_step_size
 
 
-class VolumeStepMaxHook(SRDRenderHook):
+class VolumeStepMaxHook(ScribeRenderHook):
     """Maximum number of cycles volume steps."""
     hook_label = 'Max Steps'
     hook_idname = 'step_max_size'
@@ -73,7 +73,7 @@ class VolumeStepMaxHook(SRDRenderHook):
 
 
 ## Performance group.
-class TileSizeHook(SRDRenderHook):
+class TileSizeHook(ScribeRenderHook):
     """Tile size."""
     hook_label = 'Tile Size'
     hook_idname = 'tile_size'
@@ -84,7 +84,7 @@ class TileSizeHook(SRDRenderHook):
         return '%sx%s' % (self.scene.render.tile_x, self.scene.render.tile_y)
 
 
-class TileOrderHook(SRDRenderHook):
+class TileOrderHook(ScribeRenderHook):
     """Cycles tile order."""
     hook_label = 'Tile Order'
     hook_idname = 'tile_order'
@@ -99,7 +99,7 @@ class TileOrderHook(SRDRenderHook):
         return self.orders[self.scene.cycles.tile_order]
 
 
-class ThreadsModeHook(SRDRenderHook):
+class ThreadsModeHook(ScribeRenderHook):
     """Which scheme is used to determine the number of threads."""
     hook_label = 'Threads Mode'
     hook_idname = 'threads_mode'
@@ -110,7 +110,7 @@ class ThreadsModeHook(SRDRenderHook):
         return self.scene.render.threads_mode.capitalize()
 
 
-class ThreadsHook(SRDRenderHook):
+class ThreadsHook(ScribeRenderHook):
     """How many threads are being used to render."""
     hook_label = 'Threads'
     hook_idname = 'threads'
@@ -122,7 +122,7 @@ class ThreadsHook(SRDRenderHook):
 
 
 ## Bounces group.
-class LBBoundsHook(SRDRenderHook):
+class LBBoundsHook(ScribeRenderHook):
     """Bounds of the number of reflection bounces."""
     hook_label = 'Total Bounds'
     hook_idname = 'lb_bounds'
@@ -133,7 +133,7 @@ class LBBoundsHook(SRDRenderHook):
         return "min: %s, max: %s" % (self.scene.cycles.min_bounces, self.scene.cycles.max_bounces)
 
 
-class LBDiffuseHook(SRDRenderHook):
+class LBDiffuseHook(ScribeRenderHook):
     """Maximum number of diffuse reflection bounces."""
     hook_label = 'Diffuse'
     hook_idname = 'lb_diffuse'
@@ -144,7 +144,7 @@ class LBDiffuseHook(SRDRenderHook):
         return self.scene.cycles.diffuse_bounces
 
 
-class LBGlossyHook(SRDRenderHook):
+class LBGlossyHook(ScribeRenderHook):
     """Maximum number of glossy reflection bounces."""
     hook_label = 'Glossy'
     hook_idname = 'lb_glossy'
@@ -155,7 +155,7 @@ class LBGlossyHook(SRDRenderHook):
         return self.scene.cycles.glossy_bounces
 
 
-class LBTransHook(SRDRenderHook):
+class LBTransHook(ScribeRenderHook):
     """Maximum number of transmission reflection bounces."""
     hook_label = 'Transmission'
     hook_idname = 'lb_trans'
@@ -166,7 +166,7 @@ class LBTransHook(SRDRenderHook):
         return self.scene.cycles.transmission_bounces
 
 
-class LBVolumeHook(SRDRenderHook):
+class LBVolumeHook(ScribeRenderHook):
     """Maximum number of volume reflection bounces."""
     hook_label = 'Volume'
     hook_idname = 'lb_volume'
@@ -177,7 +177,7 @@ class LBVolumeHook(SRDRenderHook):
         return self.scene.cycles.volume_bounces
 
 
-class LPShadowsHook(SRDRenderHook):
+class LPShadowsHook(ScribeRenderHook):
     """Use transparency of surfaces for rendering shadows."""
     hook_label = 'Shadows'
     hook_idname = 'lp_shadows'
@@ -188,7 +188,7 @@ class LPShadowsHook(SRDRenderHook):
         return self.scene.cycles.use_transparent_shadows
 
 
-class LPCausticsReflectiveHook(SRDRenderHook):
+class LPCausticsReflectiveHook(ScribeRenderHook):
     """Using reflective caustics."""
     hook_label = 'Reflective Caustics'
     hook_idname = 'lp_caustics_reflective'
@@ -199,7 +199,7 @@ class LPCausticsReflectiveHook(SRDRenderHook):
         return self.scene.cycles.caustics_reflective
 
 
-class LPCausticsRefractiveHook(SRDRenderHook):
+class LPCausticsRefractiveHook(ScribeRenderHook):
     """Using refractive caustics."""
     hook_label = 'Refractive Caustics'
     hook_idname = 'lp_caustics_refractive'
@@ -210,7 +210,7 @@ class LPCausticsRefractiveHook(SRDRenderHook):
         return self.scene.cycles.caustics_refractive
 
 
-class LPFilterGlossyHook(SRDRenderHook):
+class LPFilterGlossyHook(ScribeRenderHook):
     """Cycles filter glossy threshold."""
     hook_label = 'Filter Glossy'
     hook_idname = 'lp_filter_glossy'
@@ -222,7 +222,7 @@ class LPFilterGlossyHook(SRDRenderHook):
 
 
 ## Sampling group
-class SMSamplesHook(SRDRenderHook):
+class SMSamplesHook(ScribeRenderHook):
     """Number of cycles samples used(accounting for square samples)."""
     hook_label = 'Samples'
     hook_idname = 'sm_samples'
@@ -236,7 +236,7 @@ class SMSamplesHook(SRDRenderHook):
         return samples * samples if square_samples else samples
 
 
-class SMClampDirectHook(SRDRenderHook):
+class SMClampDirectHook(ScribeRenderHook):
     """How much we are clamping direct light."""
     hook_label = 'Clamp Direct'
     hook_idname = 'sm_clamp_direct'
@@ -247,7 +247,7 @@ class SMClampDirectHook(SRDRenderHook):
         return self.scene.cycles.sample_clamp_direct
 
 
-class SMClampIndirectHook(SRDRenderHook):
+class SMClampIndirectHook(ScribeRenderHook):
     """How much we are clamping indirect light."""
     hook_label = 'Clamp Indirect'
     hook_idname = 'sm_clamp_indirect'
@@ -260,39 +260,39 @@ class SMClampIndirectHook(SRDRenderHook):
 
 def register():
     # Seed group.
-    SRDRenderer.register_group('seed', 'Seed')
-    SRDRenderer.register_hook(SeedHook)
-    SRDRenderer.register_hook(SeedAnimatedHook)
+    ScribeRenderer.register_group('seed', 'Seed')
+    ScribeRenderer.register_hook(SeedHook)
+    ScribeRenderer.register_hook(SeedAnimatedHook)
 
     # Volume sampling group.
-    SRDRenderer.register_group('vol_sample', 'Volume Sampling')
-    SRDRenderer.register_hook(VolumeStepHook)
-    SRDRenderer.register_hook(VolumeStepMaxHook)
+    ScribeRenderer.register_group('vol_sample', 'Volume Sampling')
+    ScribeRenderer.register_hook(VolumeStepHook)
+    ScribeRenderer.register_hook(VolumeStepMaxHook)
 
     # Performance group.
-    SRDRenderer.register_group('perf', 'Performance')
-    SRDRenderer.register_hook(TileSizeHook)
-    SRDRenderer.register_hook(TileOrderHook)
-    SRDRenderer.register_hook(ThreadsModeHook)
-    SRDRenderer.register_hook(ThreadsHook)
+    ScribeRenderer.register_group('perf', 'Performance')
+    ScribeRenderer.register_hook(TileSizeHook)
+    ScribeRenderer.register_hook(TileOrderHook)
+    ScribeRenderer.register_hook(ThreadsModeHook)
+    ScribeRenderer.register_hook(ThreadsHook)
 
     # Bounces group.
-    SRDRenderer.register_group('light_bounces', 'Bounces')
-    SRDRenderer.register_hook(LBBoundsHook)
-    SRDRenderer.register_hook(LBDiffuseHook)
-    SRDRenderer.register_hook(LBGlossyHook)
-    SRDRenderer.register_hook(LBTransHook)
-    SRDRenderer.register_hook(LBVolumeHook)
+    ScribeRenderer.register_group('light_bounces', 'Bounces')
+    ScribeRenderer.register_hook(LBBoundsHook)
+    ScribeRenderer.register_hook(LBDiffuseHook)
+    ScribeRenderer.register_hook(LBGlossyHook)
+    ScribeRenderer.register_hook(LBTransHook)
+    ScribeRenderer.register_hook(LBVolumeHook)
 
     # Light Paths group.
-    SRDRenderer.register_group('light_paths', 'Light Paths')
-    SRDRenderer.register_hook(LPShadowsHook)
-    SRDRenderer.register_hook(LPCausticsReflectiveHook)
-    SRDRenderer.register_hook(LPCausticsRefractiveHook)
-    SRDRenderer.register_hook(LPFilterGlossyHook)
+    ScribeRenderer.register_group('light_paths', 'Light Paths')
+    ScribeRenderer.register_hook(LPShadowsHook)
+    ScribeRenderer.register_hook(LPCausticsReflectiveHook)
+    ScribeRenderer.register_hook(LPCausticsRefractiveHook)
+    ScribeRenderer.register_hook(LPFilterGlossyHook)
 
     # Sampling group
-    SRDRenderer.register_group('sampling', 'Sampling')
-    SRDRenderer.register_hook(SMSamplesHook)
-    SRDRenderer.register_hook(SMClampDirectHook)
-    SRDRenderer.register_hook(SMClampIndirectHook)
+    ScribeRenderer.register_group('sampling', 'Sampling')
+    ScribeRenderer.register_hook(SMSamplesHook)
+    ScribeRenderer.register_hook(SMClampDirectHook)
+    ScribeRenderer.register_hook(SMClampIndirectHook)
