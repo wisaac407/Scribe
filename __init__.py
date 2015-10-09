@@ -167,7 +167,7 @@ def unregister():
     del bpy.types.Scene.scribe
 
 
-if __name__ == "__main__" or __loader__ == "ScriptWatcher":
+if __name__ == "__main__":
     try:
         # This is necessary if the code is going to be re-run in the same blender instance.
         bpy.utils.unregister_class(bpy.types.ScribeRenderSettings)  # Unregister whatever is already registered.
