@@ -20,6 +20,20 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 """
 
 
+bl_info = {
+    "name": "Scribe",
+    "author": "Isaac Weaver",
+    "version": (0, 1),
+    "blender": (2, 76, 0),
+    "location": "Properties > Render > Scribe",
+    "description": "Save render settings on render.",
+    "warning": "",
+    "wiki_url": "",
+    "tracker_url": "https://github.com/wisaac407/scribe/issues/new",
+    "category": "Render",
+}
+
+
 import bpy
 from bpy.app.handlers import persistent
 
