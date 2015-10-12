@@ -158,8 +158,8 @@ def unregister():
     bpy.app.handlers.render_cancel.remove(render_cancel)
     bpy.app.handlers.render_init.remove(render_init)
     bpy.app.handlers.render_complete.remove(render_complete)
-    bpy.app.handlers.render_pre.remove(render_complete)
-    bpy.app.handlers.render_post.remove(render_complete)
+    bpy.app.handlers.render_pre.remove(render_pre)
+    bpy.app.handlers.render_post.remove(render_post)
 
     bpy.utils.unregister_class(ScribeRenderPanel)
     bpy.utils.unregister_class(ScribeRenderSettings)
