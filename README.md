@@ -57,4 +57,8 @@ After it's been installed, it should show up in the render section of the proper
 * **Clamp Direct**: How much we are clamping direct light.
 * **Clamp Indirect**: How much we are clamping indirect light.
 
+## Copyright
+Copyright (c) 2015 Isaac Weaver. See [LICENSE][licence] for details.
+
 [0]: http://www.blender.org
+[licence]: https://github.com/wisaac407/Scribe/blob/master/LICENSE.md
