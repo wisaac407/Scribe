@@ -55,10 +55,12 @@ def render_write(scene):
     # If we are writing a file then we should be writing the stats also.
     scribe_renderer.can_render = True
 
+
 @persistent
 def render_cancel(scene):
     """Just cleanup the scene because rendering was canceled."""
     cleanup(scene)
+
 
 @persistent
 def render_init(scene):
@@ -66,15 +68,18 @@ def render_init(scene):
     global scribe_renderer
     scribe_renderer = ScribeRenderer(scene)
 
+
 @persistent
 def render_complete(scene):
     # If we haven't written any files then we shouldn't write our stats.
     scribe_renderer.render()
     cleanup(scene)
 
+
 @persistent
 def render_pre(scene):
     scribe_renderer.frame_begin()
+
 
 @persistent
 def render_post(scene):
@@ -155,9 +160,11 @@ def register():
     bpy.app.handlers.render_pre.append(render_pre)
     bpy.app.handlers.render_post.append(render_post)
 
+    # Register UI panel and property group.
     bpy.utils.register_class(ScribeRenderPanel)
     bpy.utils.register_class(ScribeRenderSettings)
 
+    # Add the property group.
     bpy.types.Scene.scribe = \
         bpy.props.PointerProperty(type=ScribeRenderSettings)
 
@@ -175,9 +182,11 @@ def unregister():
     bpy.app.handlers.render_pre.remove(render_pre)
     bpy.app.handlers.render_post.remove(render_post)
 
+    # Unregister UI panel and property group.
     bpy.utils.unregister_class(ScribeRenderPanel)
     bpy.utils.unregister_class(ScribeRenderSettings)
 
+    # Remove the property group.
     del bpy.types.Scene.scribe
 
 
