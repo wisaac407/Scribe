@@ -182,12 +182,12 @@ def unregister():
     bpy.app.handlers.render_pre.remove(render_pre)
     bpy.app.handlers.render_post.remove(render_post)
 
+    # Remove the property group.
+    del bpy.types.Scene.scribe
+
     # Unregister UI panel and property group.
     bpy.utils.unregister_class(ScribeRenderPanel)
     bpy.utils.unregister_class(ScribeRenderSettings)
-
-    # Remove the property group.
-    del bpy.types.Scene.scribe
 
 
 if __name__ == "__main__":
