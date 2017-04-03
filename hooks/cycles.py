@@ -22,8 +22,8 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import bpy
 
-from scribe.ScribeRenderHook import ScribeRenderHook
-from scribe.ScribeRenderer import ScribeRenderer
+from scribe.render_hook import ScribeRenderHook
+from scribe.renderer import ScribeRenderer
 
 
 class CyclesHook(ScribeRenderHook):

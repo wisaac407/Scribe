@@ -37,7 +37,7 @@ bl_info = {
 import bpy
 from bpy.app.handlers import persistent
 
-from scribe.ScribeRenderer import ScribeRenderer
+from scribe.renderer import ScribeRenderer
 
 from scribe.hooks import cycles, general
 

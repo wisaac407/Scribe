@@ -1,5 +1,5 @@
 """
-ScribeRenderHook.py: Base class for all hooks.
+render_hook.py: Base class for all hooks.
 
 Copyright (C) 2015 Isaac Weaver
 Author: Isaac Weaver <wisaac407@gmail.com>

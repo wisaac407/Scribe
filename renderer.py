@@ -1,5 +1,5 @@
 """
-ScribeRenderer.py: The class that will keep track of hooks and handle outputting the stats file.
+renderer.py: The class that will keep track of hooks and handle outputting the stats file.
 
 Copyright (C) 2015 Isaac Weaver
 Author: Isaac Weaver <wisaac407@gmail.com>
