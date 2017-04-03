@@ -22,8 +22,8 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import time
 import bpy
-from ..ScribeRenderHook import ScribeRenderHook
-from ..ScribeRenderer import ScribeRenderer
+from scribe.ScribeRenderHook import ScribeRenderHook
+from scribe.ScribeRenderer import ScribeRenderer
 
 
 class RenderEngineHook(ScribeRenderHook):
