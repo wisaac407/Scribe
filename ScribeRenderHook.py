@@ -31,9 +31,9 @@ class ScribeRenderHook:
     hook_render_engine = {'ALL'}  # ALL is for every render engine. Though it can be any combination of render engines.
 
     @classmethod
-    def is_valid_renderer(cls, context):
-        """Return true if this hook can be used with current render engine."""
-        return context.scene.render.engine in cls.hook_render_engine or 'ALL' in cls.hook_render_engine
+    def poll(cls, context):
+        """Return true if this hook can be used with current context."""
+        return True
 
     def __init__(self, scene):
         self.scene = scene

@@ -133,9 +133,8 @@ class ScribeRenderPanel(bpy.types.Panel):
 
         use_left = True  # Used for switching columns.
         for hook in ScribeRenderer.get_hooks():
-            if hook.is_valid_renderer(context):
-                # Only check if the group has changed if the renderer is valid because some groups
-                # are only valid for one renderer.
+            if hook.poll(context):
+                # Only check if the group has changed if the hook is valid in this contexts.
                 if hook.hook_group != cur_group:
                     # The current hook has changed, add a new label and switch columns.
                     cur_group = hook.hook_group
