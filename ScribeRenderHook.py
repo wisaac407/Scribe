@@ -28,7 +28,6 @@ class ScribeRenderHook:
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
     hook_group = 'default'  # Hooks can be assigned to layout groups.
-    hook_render_engine = {'ALL'}  # ALL is for every render engine. Though it can be any combination of render engines.
 
     @classmethod
     def poll(cls, context):
