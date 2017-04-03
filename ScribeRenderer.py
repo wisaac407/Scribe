@@ -70,10 +70,10 @@ class ScribeRenderer:
         # For every active hook, initialize it with the current scene, run the pre_render function
         # and add it to the active hooks list.
 
-        use_all_hooks = scene.scribe.use_all_hooks
+        advanced_settings = scene.scribe.advanced_settings
         for hook in ScribeRenderer._registered_hooks:
             # Only add it if it's active and available in the current context.
-            if (use_all_hooks or getattr(scene.scribe, hook.hook_idname)) and hook.poll(bpy.context):
+            if (not advanced_settings or getattr(scene.scribe, hook.hook_idname)) and hook.poll(bpy.context):
                 hook = hook(scene)
                 hook.pre_render()
                 self._active_hooks.append(hook)

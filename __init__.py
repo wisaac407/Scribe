@@ -98,10 +98,10 @@ class ScribeRenderSettings(bpy.types.PropertyGroup):
         default="render_settings.txt",
         subtype="FILE_NAME"
     )
-    use_all_hooks = bpy.props.BoolProperty(
-        description="Use all render hooks(vs. selecting just the ones you want).",
-        name="Use all hooks",
-        default=True
+    advanced_settings = bpy.props.BoolProperty(
+        description="Choose which hooks to uses",
+        name="Advanced Settings",
+        default=False
     )
 
 
@@ -120,9 +120,9 @@ class ScribeRenderPanel(bpy.types.Panel):
         layout = self.layout
         layout.active = context.scene.scribe.enable
         layout.prop(context.scene.scribe, 'filename')
-        layout.prop(context.scene.scribe, 'use_all_hooks')
+        layout.prop(context.scene.scribe, 'advanced_settings')
 
-        if context.scene.scribe.use_all_hooks:
+        if not context.scene.scribe.advanced_settings:
             return
 
         cur_group = ''  # Keep track of our current group.
