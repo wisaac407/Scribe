@@ -125,9 +125,8 @@ class Renderer:
         print(s)
 
         ### Write the data to the info file.
-        f = open(path, 'w')
-        f.write(s)
-        f.close()
+        with open(path, 'w') as f:
+            f.write(s)
 
     def frame_begin(self):
         for hook in self._active_hooks:
