@@ -32,10 +32,23 @@ class RenderEngineHook(RenderHook):
 
     def post_render(self):
         engine_id = self.scene.render.engine
-        if engine_id == 'BLENDER_RENDER':  # The built in blender render is a special case.
+        # The built in blender render and blender game are special cases.
+        if engine_id == 'BLENDER_RENDER':
             return 'Blender Render'
+        elif engine_id == 'BLENDER_GAME':
+            return 'Blender Game'
         else:
-            return getattr(bpy.types, engine_id).bl_label
+            # First see if the render engine is registered with the class name the same as the bl_idname
+            engine = getattr(bpy.types, engine_id, None)
+            if engine is not None and engine.bl_idname == engine_id:
+                return engine.bl_label
+            else:
+                # Find the render engine by looking through bpy.types (dirty but it works)
+                for typ in dir(bpy.types):
+                    engine = getattr(bpy.types, typ)
+                    # If this type is a render engine and it has the same bl_idname than we found the right one.
+                    if issubclass(engine, bpy.types.RenderEngine) and engine.bl_idname == engine_id:
+                        return engine.bl_label
 
 
 class TimeHook(RenderHook):
