@@ -24,6 +24,38 @@ import os
 import bpy
 
 
+class RenderHook:
+    """Base class for all settings hooks.
+
+    Doc string will become the tooltip."""
+    # Really no need for this to be changed in any instances.
+    hook_label = 'Unset'  # Every sub-class should define their own name.
+    hook_idname = ''  # This is how other hooks can reference this one.
+    hook_group = 'default'  # Hooks can be assigned to layout groups.
+
+    @classmethod
+    def poll(cls, context):
+        """Return true if this hook can be used with current context."""
+        return True
+
+    def __init__(self, scene):
+        self.scene = scene
+
+    def pre_render(self):
+        """Called before the rendering starts."""
+
+    def post_render(self):
+        """Called after all the rendering has finished."""
+        # Every instance should implement this function.
+        raise NotImplementedError
+
+    def pre_frame(self):
+        """Called before the rendering of each frame."""
+
+    def post_frame(self):
+        """Called after the rendering of each frame"""
+
+
 class Renderer:
     """Hold the current state of the render, ie if currently rendering."""
 
