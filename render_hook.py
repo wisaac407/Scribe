@@ -20,7 +20,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 """
 
 
-class ScribeRenderHook:
+class RenderHook:
     """Base class for all settings hooks.
 
     Doc string will become the tooltip."""

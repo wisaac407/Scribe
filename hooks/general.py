@@ -22,11 +22,11 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import time
 import bpy
-from scribe.render_hook import ScribeRenderHook
-from scribe.renderer import ScribeRenderer
+from scribe.render_hook import RenderHook
+from scribe.renderer import Renderer
 
 
-class RenderEngineHook(ScribeRenderHook):
+class RenderEngineHook(RenderHook):
     """Which render engine is used to render."""
     hook_label = 'Render engine'
     hook_idname = 'engine'
@@ -39,7 +39,7 @@ class RenderEngineHook(ScribeRenderHook):
             return getattr(bpy.types, engine_id).bl_label
 
 
-class TimeHook(ScribeRenderHook):
+class TimeHook(RenderHook):
     """Total render time."""
     hook_label = 'Time'
     hook_idname = 'time'
@@ -65,7 +65,7 @@ class TimeHook(ScribeRenderHook):
             self.peakframe = self.scene.frame_current
 
 
-class FrameRateHook(ScribeRenderHook):
+class FrameRateHook(RenderHook):
     """Frame rate of the rendered animation."""
     hook_label = 'Frame Rate'
     hook_idname = 'fps'
@@ -74,7 +74,7 @@ class FrameRateHook(ScribeRenderHook):
         return '%sfps' % self.scene.render.fps
 
 
-class FrameRangeHook(ScribeRenderHook):
+class FrameRangeHook(RenderHook):
     """The output frame range."""
     hook_label = 'Frame Range'
     hook_idname = 'framerange'
@@ -86,7 +86,7 @@ class FrameRangeHook(ScribeRenderHook):
 
 
 ### Resolution group
-class ResolutionHook(ScribeRenderHook):
+class ResolutionHook(RenderHook):
     """Target resolution."""
     hook_label = 'Resolution'
     hook_idname = 'resolution'
@@ -98,7 +98,7 @@ class ResolutionHook(ScribeRenderHook):
         return "%sx%spx" % (x, y)
 
 
-class TrueResolutionHook(ScribeRenderHook):
+class TrueResolutionHook(RenderHook):
     """Actual output resolution."""
     hook_label = 'True resolution'
     hook_idname = 'trueres'
@@ -113,12 +113,12 @@ class TrueResolutionHook(ScribeRenderHook):
 
 def register():
     # General.
-    ScribeRenderer.register_hook(RenderEngineHook)
-    ScribeRenderer.register_hook(TimeHook)
-    ScribeRenderer.register_hook(FrameRateHook)
-    ScribeRenderer.register_hook(FrameRangeHook)
+    Renderer.register_hook(RenderEngineHook)
+    Renderer.register_hook(TimeHook)
+    Renderer.register_hook(FrameRateHook)
+    Renderer.register_hook(FrameRangeHook)
 
     # Resolution group.
-    ScribeRenderer.register_group('resolution', 'Output Resolution')
-    ScribeRenderer.register_hook(ResolutionHook)
-    ScribeRenderer.register_hook(TrueResolutionHook)
+    Renderer.register_group('resolution', 'Output Resolution')
+    Renderer.register_hook(ResolutionHook)
+    Renderer.register_hook(TrueResolutionHook)

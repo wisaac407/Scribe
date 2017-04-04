@@ -37,7 +37,7 @@ bl_info = {
 import bpy
 from bpy.app.handlers import persistent
 
-from scribe.renderer import ScribeRenderer
+from scribe.renderer import Renderer
 
 from scribe.hooks import cycles, general
 
@@ -66,7 +66,7 @@ def render_cancel(scene):
 def render_init(scene):
     """Initialize the intermediate props set on the scene."""
     global scribe_renderer
-    scribe_renderer = ScribeRenderer(scene)
+    scribe_renderer = Renderer(scene)
 
 
 @persistent
@@ -132,7 +132,7 @@ class ScribeRenderPanel(bpy.types.Panel):
         col2 = split.column()  # Right column
 
         use_left = True  # Used for switching columns.
-        for hook in ScribeRenderer.get_hooks():
+        for hook in Renderer.get_hooks():
             if hook.poll(context):
                 # Only check if the group has changed if the hook is valid in this contexts.
                 if hook.hook_group != cur_group:
@@ -145,7 +145,7 @@ class ScribeRenderPanel(bpy.types.Panel):
 
                     # Add the group label.
                     col.separator()
-                    col.label(ScribeRenderer.get_group(cur_group)[0] + ':')
+                    col.label(Renderer.get_group(cur_group)[0] + ':')
 
                 col.prop(context.scene.scribe, hook.hook_idname)
 

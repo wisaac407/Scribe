@@ -22,11 +22,11 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import bpy
 
-from scribe.render_hook import ScribeRenderHook
-from scribe.renderer import ScribeRenderer
+from scribe.render_hook import RenderHook
+from scribe.renderer import Renderer
 
 
-class CyclesHook(ScribeRenderHook):
+class CyclesHook(RenderHook):
     """Cycles-only render hook"""
     @classmethod
     def poll(self, context):
@@ -86,7 +86,7 @@ class TileSizeHook(CyclesHook):
         return '%sx%s' % (self.scene.render.tile_x, self.scene.render.tile_y)
 
 
-class TileOrderHook(ScribeRenderHook):
+class TileOrderHook(RenderHook):
     """Cycles tile order."""
     hook_label = 'Tile Order'
     hook_idname = 'tile_order'
@@ -104,7 +104,7 @@ class TileOrderHook(ScribeRenderHook):
         return self.orders[self.scene.cycles.tile_order]
 
 
-class ThreadsModeHook(ScribeRenderHook):
+class ThreadsModeHook(RenderHook):
     """Which scheme is used to determine the number of threads."""
     hook_label = 'Threads Mode'
     hook_idname = 'threads_mode'
@@ -118,7 +118,7 @@ class ThreadsModeHook(ScribeRenderHook):
         return self.scene.render.threads_mode.capitalize()
 
 
-class ThreadsHook(ScribeRenderHook):
+class ThreadsHook(RenderHook):
     """How many threads are being used to render."""
     hook_label = 'Threads'
     hook_idname = 'threads'
@@ -259,39 +259,39 @@ class SMClampIndirectHook(CyclesHook):
 
 def register():
     # Seed group.
-    ScribeRenderer.register_group('seed', 'Seed')
-    ScribeRenderer.register_hook(SeedHook)
-    ScribeRenderer.register_hook(SeedAnimatedHook)
+    Renderer.register_group('seed', 'Seed')
+    Renderer.register_hook(SeedHook)
+    Renderer.register_hook(SeedAnimatedHook)
 
     # Volume sampling group.
-    ScribeRenderer.register_group('vol_sample', 'Volume Sampling')
-    ScribeRenderer.register_hook(VolumeStepHook)
-    ScribeRenderer.register_hook(VolumeStepMaxHook)
+    Renderer.register_group('vol_sample', 'Volume Sampling')
+    Renderer.register_hook(VolumeStepHook)
+    Renderer.register_hook(VolumeStepMaxHook)
 
     # Performance group.
-    ScribeRenderer.register_group('perf', 'Performance')
-    ScribeRenderer.register_hook(TileSizeHook)
-    ScribeRenderer.register_hook(TileOrderHook)
-    ScribeRenderer.register_hook(ThreadsModeHook)
-    ScribeRenderer.register_hook(ThreadsHook)
+    Renderer.register_group('perf', 'Performance')
+    Renderer.register_hook(TileSizeHook)
+    Renderer.register_hook(TileOrderHook)
+    Renderer.register_hook(ThreadsModeHook)
+    Renderer.register_hook(ThreadsHook)
 
     # Bounces group.
-    ScribeRenderer.register_group('light_bounces', 'Bounces')
-    ScribeRenderer.register_hook(LBBoundsHook)
-    ScribeRenderer.register_hook(LBDiffuseHook)
-    ScribeRenderer.register_hook(LBGlossyHook)
-    ScribeRenderer.register_hook(LBTransHook)
-    ScribeRenderer.register_hook(LBVolumeHook)
+    Renderer.register_group('light_bounces', 'Bounces')
+    Renderer.register_hook(LBBoundsHook)
+    Renderer.register_hook(LBDiffuseHook)
+    Renderer.register_hook(LBGlossyHook)
+    Renderer.register_hook(LBTransHook)
+    Renderer.register_hook(LBVolumeHook)
 
     # Light Paths group.
-    ScribeRenderer.register_group('light_paths', 'Light Paths')
-    ScribeRenderer.register_hook(LPShadowsHook)
-    ScribeRenderer.register_hook(LPCausticsReflectiveHook)
-    ScribeRenderer.register_hook(LPCausticsRefractiveHook)
-    ScribeRenderer.register_hook(LPFilterGlossyHook)
+    Renderer.register_group('light_paths', 'Light Paths')
+    Renderer.register_hook(LPShadowsHook)
+    Renderer.register_hook(LPCausticsReflectiveHook)
+    Renderer.register_hook(LPCausticsRefractiveHook)
+    Renderer.register_hook(LPFilterGlossyHook)
 
     # Sampling group
-    ScribeRenderer.register_group('sampling', 'Sampling')
-    ScribeRenderer.register_hook(SMSamplesHook)
-    ScribeRenderer.register_hook(SMClampDirectHook)
-    ScribeRenderer.register_hook(SMClampIndirectHook)
+    Renderer.register_group('sampling', 'Sampling')
+    Renderer.register_hook(SMSamplesHook)
+    Renderer.register_hook(SMClampDirectHook)
+    Renderer.register_hook(SMClampIndirectHook)

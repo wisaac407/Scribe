@@ -24,7 +24,7 @@ import os
 import bpy
 
 
-class ScribeRenderer:
+class Renderer:
     """Hold the current state of the render, ie if currently rendering."""
 
     _registered_hooks = []
@@ -71,7 +71,7 @@ class ScribeRenderer:
         # and add it to the active hooks list.
 
         advanced_settings = scene.scribe.advanced_settings
-        for hook in ScribeRenderer._registered_hooks:
+        for hook in Renderer._registered_hooks:
             # Only add it if it's active and available in the current context.
             if (not advanced_settings or getattr(scene.scribe, hook.hook_idname)) and hook.poll(bpy.context):
                 hook = hook(scene)
