@@ -22,7 +22,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import bpy
 
-from scribe.renderer import Renderer, RenderHook
+from scribe.renderer import RenderHook, register_hook, register_group
 
 
 class CyclesHook(RenderHook):
@@ -258,39 +258,39 @@ class SMClampIndirectHook(CyclesHook):
 
 def register():
     # Seed group.
-    Renderer.register_group('seed', 'Seed')
-    Renderer.register_hook(SeedHook)
-    Renderer.register_hook(SeedAnimatedHook)
+    register_group('seed', 'Seed')
+    register_hook(SeedHook)
+    register_hook(SeedAnimatedHook)
 
     # Volume sampling group.
-    Renderer.register_group('vol_sample', 'Volume Sampling')
-    Renderer.register_hook(VolumeStepHook)
-    Renderer.register_hook(VolumeStepMaxHook)
+    register_group('vol_sample', 'Volume Sampling')
+    register_hook(VolumeStepHook)
+    register_hook(VolumeStepMaxHook)
 
     # Performance group.
-    Renderer.register_group('perf', 'Performance')
-    Renderer.register_hook(TileSizeHook)
-    Renderer.register_hook(TileOrderHook)
-    Renderer.register_hook(ThreadsModeHook)
-    Renderer.register_hook(ThreadsHook)
+    register_group('perf', 'Performance')
+    register_hook(TileSizeHook)
+    register_hook(TileOrderHook)
+    register_hook(ThreadsModeHook)
+    register_hook(ThreadsHook)
 
     # Bounces group.
-    Renderer.register_group('light_bounces', 'Bounces')
-    Renderer.register_hook(LBBoundsHook)
-    Renderer.register_hook(LBDiffuseHook)
-    Renderer.register_hook(LBGlossyHook)
-    Renderer.register_hook(LBTransHook)
-    Renderer.register_hook(LBVolumeHook)
+    register_group('light_bounces', 'Bounces')
+    register_hook(LBBoundsHook)
+    register_hook(LBDiffuseHook)
+    register_hook(LBGlossyHook)
+    register_hook(LBTransHook)
+    register_hook(LBVolumeHook)
 
     # Light Paths group.
-    Renderer.register_group('light_paths', 'Light Paths')
-    Renderer.register_hook(LPShadowsHook)
-    Renderer.register_hook(LPCausticsReflectiveHook)
-    Renderer.register_hook(LPCausticsRefractiveHook)
-    Renderer.register_hook(LPFilterGlossyHook)
+    register_group('light_paths', 'Light Paths')
+    register_hook(LPShadowsHook)
+    register_hook(LPCausticsReflectiveHook)
+    register_hook(LPCausticsRefractiveHook)
+    register_hook(LPFilterGlossyHook)
 
     # Sampling group
-    Renderer.register_group('sampling', 'Sampling')
-    Renderer.register_hook(SMSamplesHook)
-    Renderer.register_hook(SMClampDirectHook)
-    Renderer.register_hook(SMClampIndirectHook)
+    register_group('sampling', 'Sampling')
+    register_hook(SMSamplesHook)
+    register_hook(SMClampDirectHook)
+    register_hook(SMClampIndirectHook)

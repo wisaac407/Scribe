@@ -22,7 +22,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 
 import time
 import bpy
-from scribe.renderer import Renderer, RenderHook
+from scribe.renderer import RenderHook, register_hook, register_group
 
 
 class RenderEngineHook(RenderHook):
@@ -112,12 +112,12 @@ class TrueResolutionHook(RenderHook):
 
 def register():
     # General.
-    Renderer.register_hook(RenderEngineHook)
-    Renderer.register_hook(TimeHook)
-    Renderer.register_hook(FrameRateHook)
-    Renderer.register_hook(FrameRangeHook)
+    register_hook(RenderEngineHook)
+    register_hook(TimeHook)
+    register_hook(FrameRateHook)
+    register_hook(FrameRangeHook)
 
     # Resolution group.
-    Renderer.register_group('resolution', 'Output Resolution')
-    Renderer.register_hook(ResolutionHook)
-    Renderer.register_hook(TrueResolutionHook)
+    register_group('resolution', 'Output Resolution')
+    register_hook(ResolutionHook)
+    register_hook(TrueResolutionHook)

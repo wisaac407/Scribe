@@ -56,43 +56,45 @@ class RenderHook:
         """Called after the rendering of each frame"""
 
 
+_registered_hooks = []
+_registered_groups = {'default': ('General', 0)}
+_group_id = 1
+
+
+def register_hook(hook):
+    """Add hook to the list of available hooks and add a bool property to the property group."""
+    _registered_hooks.append(hook)
+
+    # Sort the list of hooks based on the hook groups.
+    def get_group(h):
+        if h.hook_group not in _registered_groups:
+            raise Exception("Group '%s' has not yet been registered." % h.hook_group)
+        return _registered_groups[h.hook_group][1]
+    _registered_hooks.sort(key=get_group)
+
+    setattr(bpy.types.ScribeRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
+        name=hook.hook_label,
+        description=hook.__doc__,
+        default=True
+    ))
+
+
+def register_group(idname, label):
+    global _group_id
+    _registered_groups[idname] = (label, _group_id)
+    _group_id += 1
+
+
+def get_hooks():
+    return _registered_hooks
+
+
+def get_group(idname):
+    return _registered_groups[idname]
+
+
 class Renderer:
     """Hold the current state of the render, ie if currently rendering."""
-
-    _registered_hooks = []
-    _registered_groups = {'default': ('General', 0)}
-    _group_id = 1
-
-    @classmethod
-    def register_hook(cls, hook):
-        """Add hook to the list of available hooks and add a bool property to the property group."""
-        cls._registered_hooks.append(hook)
-
-        # Sort the list of hooks based on the hook groups.
-        def get_group(h):
-            if h.hook_group not in cls._registered_groups:
-                raise Exception("Group '%s' has not yet been registered." % h.hook_group)
-            return cls._registered_groups[h.hook_group][1]
-        cls._registered_hooks.sort(key=get_group)
-
-        setattr(bpy.types.ScribeRenderSettings, hook.hook_idname, bpy.props.BoolProperty(
-            name=hook.hook_label,
-            description=hook.__doc__,
-            default=True
-        ))
-
-    @classmethod
-    def register_group(cls, idname, label):
-        cls._registered_groups[idname] = (label, cls._group_id)
-        cls._group_id += 1
-
-    @classmethod
-    def get_hooks(cls):
-        return cls._registered_hooks
-
-    @classmethod
-    def get_group(cls, idname):
-        return cls._registered_groups[idname]
 
     def __init__(self, scene):
         self.scene = scene
@@ -103,7 +105,7 @@ class Renderer:
         # and add it to the active hooks list.
 
         advanced_settings = scene.scribe.advanced_settings
-        for hook in Renderer._registered_hooks:
+        for hook in _registered_hooks:
             # Only add it if it's active and available in the current context.
             if (not advanced_settings or getattr(scene.scribe, hook.hook_idname)) and hook.poll(bpy.context):
                 hook = hook(scene)
@@ -146,7 +148,7 @@ class Renderer:
         lastgroup = ''
         for hook in self._active_hooks:
             if hook.hook_group != lastgroup:
-                s += '\n\n %s:\n%s\n' % (self._registered_groups[hook.hook_group][0], '='*50)
+                s += '\n\n %s:\n%s\n' % (_registered_groups[hook.hook_group][0], '='*50)
                 lastgroup = hook.hook_group
             s += template.format(name=hook.hook_label, data=hook.post_render())
             s += '\n'

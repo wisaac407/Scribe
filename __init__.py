@@ -37,7 +37,7 @@ bl_info = {
 import bpy
 from bpy.app.handlers import persistent
 
-from scribe.renderer import Renderer
+from scribe.renderer import Renderer, get_group, get_hooks
 
 from scribe.hooks import cycles, general
 
@@ -132,7 +132,7 @@ class ScribeRenderPanel(bpy.types.Panel):
         col2 = split.column()  # Right column
 
         use_left = True  # Used for switching columns.
-        for hook in Renderer.get_hooks():
+        for hook in get_hooks():
             if hook.poll(context):
                 # Only check if the group has changed if the hook is valid in this contexts.
                 if hook.hook_group != cur_group:
@@ -145,7 +145,7 @@ class ScribeRenderPanel(bpy.types.Panel):
 
                     # Add the group label.
                     col.separator()
-                    col.label(Renderer.get_group(cur_group)[0] + ':')
+                    col.label(get_group(cur_group)[0] + ':')
 
                 col.prop(context.scene.scribe, hook.hook_idname)
 
