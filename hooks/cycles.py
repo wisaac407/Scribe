@@ -23,7 +23,7 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 import bpy
 
 from scribe.renderer import RenderHook, register_hook, register_group
-
+from scribe.data_handlers import *
 
 class CyclesHook(RenderHook):
     """Cycles-only render hook"""
@@ -38,6 +38,7 @@ class SeedHook(CyclesHook):
     hook_label = 'Seed'
     hook_idname = 'seed'
     hook_group = 'seed'
+    hook_handler = IntHandler
 
     def post_render(self):
         return self.scene.cycles.seed
@@ -48,6 +49,7 @@ class SeedAnimatedHook(CyclesHook):
     hook_label = 'Seed is Animated'
     hook_idname = 'animated_seed'
     hook_group = 'seed'
+    hook_handler = BoolHandler
 
     def post_render(self):
         return self.scene.cycles.use_animated_seed
@@ -59,6 +61,7 @@ class VolumeStepHook(CyclesHook):
     hook_label = 'Step Size'
     hook_idname = 'step_size'
     hook_group = 'vol_sample'
+    hook_handler = NumberHandler
 
     def post_render(self):
         return self.scene.cycles.volume_step_size
@@ -69,6 +72,7 @@ class VolumeStepMaxHook(CyclesHook):
     hook_label = 'Max Steps'
     hook_idname = 'step_max_size'
     hook_group = 'vol_sample'
+    hook_handler = NumberHandler
 
     def post_render(self):
         return self.scene.cycles.volume_max_steps
@@ -80,6 +84,7 @@ class TileSizeHook(CyclesHook):
     hook_label = 'Tile Size'
     hook_idname = 'tile_size'
     hook_group = 'perf'
+    hook_handler = IntHandler
 
     def post_render(self):
         return '%sx%s' % (self.scene.render.tile_x, self.scene.render.tile_y)
@@ -90,6 +95,7 @@ class TileOrderHook(RenderHook):
     hook_label = 'Tile Order'
     hook_idname = 'tile_order'
     hook_group = 'perf'
+    hook_handler = StringHandler
 
     # Dictionary mapping order idname -> order label. i.e. {'CENTER': 'center'}
     orders = dict((idname, label) for idname, label, _ in
@@ -108,6 +114,7 @@ class ThreadsModeHook(RenderHook):
     hook_label = 'Threads Mode'
     hook_idname = 'threads_mode'
     hook_group = 'perf'
+    hook_handler = StringHandler
 
     @classmethod
     def poll(cls, context):
@@ -122,6 +129,7 @@ class ThreadsHook(RenderHook):
     hook_label = 'Threads'
     hook_idname = 'threads'
     hook_group = 'perf'
+    hook_handler = IntHandler
 
     @classmethod
     def poll(cls, context):
@@ -137,6 +145,7 @@ class LBBoundsHook(CyclesHook):
     hook_label = 'Total Bounds'
     hook_idname = 'lb_bounds'
     hook_group = 'light_bounces'
+    hook_handler = StringHandler
 
     def post_render(self):
         return "min: %s, max: %s" % (self.scene.cycles.min_bounces, self.scene.cycles.max_bounces)
@@ -147,6 +156,7 @@ class LBDiffuseHook(CyclesHook):
     hook_label = 'Diffuse'
     hook_idname = 'lb_diffuse'
     hook_group = 'light_bounces'
+    hook_handler = IntHandler
 
     def post_render(self):
         return self.scene.cycles.diffuse_bounces
@@ -157,6 +167,7 @@ class LBGlossyHook(CyclesHook):
     hook_label = 'Glossy'
     hook_idname = 'lb_glossy'
     hook_group = 'light_bounces'
+    hook_handler = IntHandler
 
     def post_render(self):
         return self.scene.cycles.glossy_bounces
@@ -167,6 +178,7 @@ class LBTransHook(CyclesHook):
     hook_label = 'Transmission'
     hook_idname = 'lb_trans'
     hook_group = 'light_bounces'
+    hook_handler = IntHandler
 
     def post_render(self):
         return self.scene.cycles.transmission_bounces
@@ -177,6 +189,7 @@ class LBVolumeHook(CyclesHook):
     hook_label = 'Volume'
     hook_idname = 'lb_volume'
     hook_group = 'light_bounces'
+    hook_handler = IntHandler
 
     def post_render(self):
         return self.scene.cycles.volume_bounces
@@ -187,6 +200,7 @@ class LPShadowsHook(CyclesHook):
     hook_label = 'Shadows'
     hook_idname = 'lp_shadows'
     hook_group = 'light_paths'
+    hook_handler = BoolHandler
 
     def post_render(self):
         return self.scene.cycles.use_transparent_shadows
@@ -197,6 +211,7 @@ class LPCausticsReflectiveHook(CyclesHook):
     hook_label = 'Reflective Caustics'
     hook_idname = 'lp_caustics_reflective'
     hook_group = 'light_paths'
+    hook_handler = BoolHandler
 
     def post_render(self):
         return self.scene.cycles.caustics_reflective
@@ -207,6 +222,7 @@ class LPCausticsRefractiveHook(CyclesHook):
     hook_label = 'Refractive Caustics'
     hook_idname = 'lp_caustics_refractive'
     hook_group = 'light_paths'
+    hook_handler = BoolHandler
 
     def post_render(self):
         return self.scene.cycles.caustics_refractive
@@ -217,6 +233,7 @@ class LPFilterGlossyHook(CyclesHook):
     hook_label = 'Filter Glossy'
     hook_idname = 'lp_filter_glossy'
     hook_group = 'light_paths'
+    hook_handler = BoolHandler
 
     def post_render(self):
         return self.scene.cycles.blur_glossy
@@ -228,6 +245,7 @@ class SMSamplesHook(CyclesHook):
     hook_label = 'Samples'
     hook_idname = 'sm_samples'
     hook_group = 'sampling'
+    hook_handler = IntHandler
 
     def post_render(self):
         samples = self.scene.cycles.samples
@@ -241,6 +259,7 @@ class SMClampDirectHook(CyclesHook):
     hook_label = 'Clamp Direct'
     hook_idname = 'sm_clamp_direct'
     hook_group = 'sampling'
+    hook_handler = NumberHandler
 
     def post_render(self):
         return self.scene.cycles.sample_clamp_direct
@@ -251,6 +270,7 @@ class SMClampIndirectHook(CyclesHook):
     hook_label = 'Clamp Indirect'
     hook_idname = 'sm_clamp_indirect'
     hook_group = 'sampling'
+    hook_handler = NumberHandler
 
     def post_render(self):
         return self.scene.cycles.sample_clamp_indirect

@@ -34,6 +34,7 @@ class RenderHook:
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
     hook_group = 'default'  # Hooks can be assigned to layout groups.
+    hook_handler = None
 
     @classmethod
     def poll(cls, context):
@@ -42,6 +43,17 @@ class RenderHook:
 
     def __init__(self, scene):
         self.scene = scene
+        self.handler = self.hook_handler()
+
+    def get_result(self):
+        """
+        Called by the renderer to get the final result form this hook
+        
+        Most hooks won't have to override this method.
+        """
+
+        self.handler.data = self.post_render()
+        return self.handler.dump()
 
     def pre_render(self):
         """Called before the rendering starts."""
@@ -151,6 +163,6 @@ class Renderer:
             if hook.hook_group != lastgroup:
                 s += '\n\n %s:\n%s\n' % (_registered_groups[hook.hook_group][0], '='*50)
                 lastgroup = hook.hook_group
-            s += template.format(name=hook.hook_label, data=hook.post_render())
+            s += template.format(name=hook.hook_label, data=hook.get_result())
             s += '\n'
         return s[2:]  # Cut out the first new line character.

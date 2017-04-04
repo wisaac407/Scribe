@@ -23,12 +23,13 @@ Author: Isaac Weaver <wisaac407@gmail.com>
 import time
 import bpy
 from scribe.renderer import RenderHook, register_hook, register_group
-
+from scribe.data_handlers import *
 
 class RenderEngineHook(RenderHook):
     """Which render engine is used to render."""
     hook_label = 'Render engine'
     hook_idname = 'engine'
+    hook_handler = StringHandler
 
     def post_render(self):
         engine_id = self.scene.render.engine
@@ -55,6 +56,7 @@ class TimeHook(RenderHook):
     """Total render time."""
     hook_label = 'Time'
     hook_idname = 'time'
+    hook_handler = StringHandler
 
     t = 0
     ft = 0
@@ -81,6 +83,7 @@ class FrameRateHook(RenderHook):
     """Frame rate of the rendered animation."""
     hook_label = 'Frame Rate'
     hook_idname = 'fps'
+    hook_handler = StringHandler
 
     def post_render(self):
         return '%sfps' % self.scene.render.fps
@@ -90,6 +93,7 @@ class FrameRangeHook(RenderHook):
     """The output frame range."""
     hook_label = 'Frame Range'
     hook_idname = 'framerange'
+    hook_handler = StringHandler
 
     def post_render(self):
         start = self.scene.frame_start
@@ -103,6 +107,7 @@ class ResolutionHook(RenderHook):
     hook_label = 'Resolution'
     hook_idname = 'resolution'
     hook_group = 'resolution'
+    hook_handler = StringHandler
 
     def post_render(self):
         x = self.scene.render.resolution_x
@@ -115,6 +120,7 @@ class TrueResolutionHook(RenderHook):
     hook_label = 'True resolution'
     hook_idname = 'trueres'
     hook_group = 'resolution'
+    hook_handler = StringHandler
 
     def post_render(self):
         fac = self.scene.render.resolution_percentage / 100
