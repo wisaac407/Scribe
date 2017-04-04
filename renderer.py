@@ -25,9 +25,11 @@ import bpy
 
 
 class RenderHook:
-    """Base class for all settings hooks.
+    """
+    Base class for all settings hooks.
 
-    Doc string will become the tooltip."""
+    Doc string will become the tooltip.
+    """
     # Really no need for this to be changed in any instances.
     hook_label = 'Unset'  # Every sub-class should define their own name.
     hook_idname = ''  # This is how other hooks can reference this one.
